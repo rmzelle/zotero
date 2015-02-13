@@ -111,7 +111,6 @@
 
 <!ENTITY zotero.preferences.prefpane.cite					"Cite">
 <!ENTITY zotero.preferences.cite.styles			"Styles">
-<!ENTITY zotero.preferences.cite.bibliographyLocale			"Bibliography Locale:">
 <!ENTITY zotero.preferences.cite.wordProcessors	"Word Processors">
 <!ENTITY zotero.preferences.cite.wordProcessors.noWordProcessorPluginsInstalled "No word processor plug-ins are currently installed.">
 <!ENTITY zotero.preferences.cite.wordProcessors.getPlugins	"Get word processor plug-ins...">

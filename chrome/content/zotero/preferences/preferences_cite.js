@@ -29,7 +29,6 @@ Zotero_Preferences.Cite = {
 	init: function () {
 		this.updateWordProcessorInstructions();
 		this.refreshStylesList();
-		this.populateBibliographyLocaleList();
 	},
 	
 	
@@ -160,45 +159,5 @@ Zotero_Preferences.Cite = {
 	 **/
 	styleImportError: function () {
 		alert(Zotero.getString('styles.installError', "This"));
-	},
-	
-	/*
-	 * Builds the bibliographyLocale drop-down from available CSL locales
-	 */
-	populateBibliographyLocaleList: function () {
-		// Initialize default format drop-down
-		var bibliographyLocale = '';
-		bibliographyLocale = Zotero.Prefs.get("export.bibliographyLocale");
-		
-		if(!bibliographyLocale) {
-			bibliographyLocale = Zotero.locale;
-		}
-		if(!bibliographyLocale) {
-			bibliographyLocale = 'en-US';
-		}
-		
-		var locales = null;
-		var localesLocation = "resource://zotero/schema/locales.json"; 
-		
-		locales = JSON.parse(Zotero.File.getContentsFromURL(localesLocation));
-		
-		var menulist = document.getElementById("bibliographyLocale-menu");
-		var popup = document.createElement('menupopup');
-		menulist.appendChild(popup);
-		
-		for(var locale in locales) {
-			var menuValue = locale;
-			var menuLabel = locales[locale][0];
-			var itemNode = document.createElement("menuitem");
-			itemNode.setAttribute("value", menuValue);
-			itemNode.setAttribute("label", menuLabel);
-			popup.appendChild(itemNode);
-			
-			if (menuValue == bibliographyLocale) {
-				menulist.selectedItem = itemNode;
-			}
-		}
-		
-		menulist.setAttribute('preference', "pref-cite-bibliographyLocale");
 	}
 }
