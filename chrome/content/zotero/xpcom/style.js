@@ -84,6 +84,22 @@ Zotero.Styles = new function() {
 		if(dir.exists()) i += _readStylesFromDirectory(dir, true);
 		
 		Zotero.debug("Cached "+i+" styles in "+((new Date()).getTime() - start)+" ms");
+		
+		// transfer and reset "export.bibliographyLocale" pref value
+		var bibliographyLocale = '';
+		bibliographyLocale = Zotero.Prefs.get("export.bibliographyLocale");
+		if(bibliographyLocale) {
+			Zotero.Prefs.set("export.lastLocale", bibliographyLocale);
+			Zotero.Prefs.set("export.quickCopy.locale", bibliographyLocale);
+			Zotero.Prefs.set("export.bibliographyLocale", "");
+		}
+		
+		// load available CSL locales
+		var locales = null;
+		var localesLocation = "chrome://zotero/content/locale/csl/locales.json";
+		locales = JSON.parse(Zotero.File.getContentsFromURL(localesLocation));
+		
+		this.locales = locales;
 	}
 	
 	/**

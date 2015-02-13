@@ -33,6 +33,7 @@
 		<preferences>
 			<preference id="pref-quickCopy-setting" name="extensions.zotero.export.quickCopy.setting" type="string"/>
 			<preference id="pref-quickCopy-dragLimit" name="extensions.zotero.export.quickCopy.dragLimit" type="int"/>
+			<preference id="pref-quickCopy-locale" name="extensions.zotero.export.quickCopy.locale" type="string"/>
 			<preference id="pref-export-displayCharsetOption" name="extensions.zotero.export.displayCharsetOption" type="bool"/>
 			<preference id="pref-import-charset" name="extensions.zotero.import.charset" type="string"/>
 		</preferences>
@@ -48,6 +49,13 @@
 			
 			<label value="&zotero.preferences.quickCopy.defaultOutputFormat;" control="quickCopy-menu"/>
 			<menulist id="zotero-quickCopy-menu"/>
+			
+			<separator class="thin"/>
+			
+			<hbox align="center">
+				<label value="&zotero.preferences.quickCopy.locale;" control="quickCopy-locale-menu"/>
+				<menulist id="quickCopy-locale-menu"/>
+			</hbox>
 			
 			<separator class="thin"/>
 			

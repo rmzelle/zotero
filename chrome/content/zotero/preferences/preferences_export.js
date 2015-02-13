@@ -28,6 +28,7 @@
 Zotero_Preferences.Export = {
 	init: function () {
 		this.populateQuickCopyList();
+		this.populateQuickCopyLocaleList();
 		this.updateQuickCopyInstructions();
 		
 		var charsetMenu = document.getElementById("zotero-import-charsetMenu");
@@ -223,6 +224,50 @@ Zotero_Preferences.Export = {
 		this.refreshQuickCopySiteList();
 	},
 	
+	/*
+	 * Builds the Quick Copy locale drop-down
+	 */
+	populateQuickCopyLocaleList: function () {
+		var menulist = document.getElementById("quickCopy-locale-menu");
+		var popup = document.createElement('menupopup');
+		menulist.appendChild(popup);
+		
+		var quickCopyLocale = "";
+		quickCopyLocale = Zotero.Prefs.get("export.quickCopy.locale");
+		
+		// fall back on Zotero.locale
+		if (!quickCopyLocale) {
+			quickCopyLocale = Zotero.locale;
+		}
+		
+		var itemNode;
+		var cslLocales = {};
+		cslLocales = Zotero.Styles.locales;
+		
+		// add pref value to menu if not a recognized CSL locale
+		if (!cslLocales.hasOwnProperty(quickCopyLocale)) {
+			itemNode = document.createElement("menuitem");
+			itemNode.setAttribute("value", quickCopyLocale);
+			itemNode.setAttribute("label", quickCopyLocale);
+			popup.appendChild(itemNode);
+		}
+		
+		// add CSL locales to menu
+		for(var locale in cslLocales) {
+			var menuValue = locale;
+			var menuLabel = cslLocales[locale][0];
+			itemNode = document.createElement("menuitem");
+			itemNode.setAttribute("value", menuValue);
+			itemNode.setAttribute("label", menuLabel);
+			popup.appendChild(itemNode);
+			
+			if (menuValue == quickCopyLocale) {
+				menulist.selectedItem = itemNode;
+			}
+		}
+		
+		menulist.setAttribute('preference', "pref-quickCopy-locale");
+	},
 	
 	updateQuickCopyInstructions: function () {
 		var prefix = Zotero.isMac ? Zotero.getString('general.keys.cmdShift') : Zotero.getString('general.keys.ctrlShift');
