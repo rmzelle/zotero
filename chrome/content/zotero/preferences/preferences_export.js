@@ -250,10 +250,11 @@ Zotero_Preferences.Export = {
 			itemNode.setAttribute("value", quickCopyLocale);
 			itemNode.setAttribute("label", quickCopyLocale);
 			popup.appendChild(itemNode);
+			menulist.selectedItem = itemNode;
 		}
 		
 		// add CSL locales to menu
-		for(var locale in cslLocales) {
+		for (var locale in cslLocales) {
 			var menuValue = locale;
 			var menuLabel = cslLocales[locale][0];
 			itemNode = document.createElement("menuitem");
@@ -267,6 +268,21 @@ Zotero_Preferences.Export = {
 		}
 		
 		menulist.setAttribute('preference', "pref-quickCopy-locale");
+		menulist.setAttribute('onsynctopreference', "return Zotero_Preferences.Export.onsynctopreference();");
+	},
+	
+	onsynctopreference: function () {
+		var menulist = document.getElementById("quickCopy-locale-menu");
+		var selectedLocale = menulist.selectedItem.value;
+		
+		var quickCopyLocale = "";
+		quickCopyLocale = Zotero.Prefs.get("export.quickCopy.locale");
+		
+		if (quickCopyLocale || (selectedLocale !== Zotero.locale)) {
+			Zotero.Prefs.set("export.quickCopy.locale", selectedLocale);
+		}
+		
+		return selectedLocale;
 	},
 	
 	updateQuickCopyInstructions: function () {
