@@ -232,37 +232,46 @@ Zotero_Preferences.Export = {
 		var popup = document.createElement('menupopup');
 		menulist.appendChild(popup);
 		
-		var quickCopyLocale = "";
-		quickCopyLocale = Zotero.Prefs.get("export.quickCopy.locale");
+		var quickCopyLocale = Zotero.Prefs.get("export.quickCopy.locale");
 		
-		// fall back on Zotero.locale
-		if (!quickCopyLocale) {
-			quickCopyLocale = Zotero.locale;
+		var selectedLocale = "";
+		if (quickCopyLocale) {
+			selectedLocale = quickCopyLocale;
+		} else {
+			selectedLocale = Zotero.locale;
+		}
+		
+		var cslLocales = {};
+		var cslLocalesKeys = [];
+		cslLocales = Zotero.Styles.locales;
+		
+		for (var locale in cslLocales) {
+			if (cslLocales.hasOwnProperty(locale)) {
+				cslLocalesKeys.push(locale);
+			}
+		}
+		
+		cslLocalesKeys.sort();
+		
+		if (Zotero.locale && !cslLocales.hasOwnProperty(Zotero.locale)) {
+			cslLocales[Zotero.locale] = [Zotero.locale];
+			cslLocalesKeys.unshift(Zotero.locale);
+		}
+		if (quickCopyLocale && !cslLocales.hasOwnProperty(quickCopyLocale)) {
+			cslLocales[quickCopyLocale] = [quickCopyLocale];
+			cslLocalesKeys.unshift(quickCopyLocale);
 		}
 		
 		var itemNode;
-		var cslLocales = {};
-		cslLocales = Zotero.Styles.locales;
-		
-		// add pref value to menu if not a recognized CSL locale
-		if (!cslLocales.hasOwnProperty(quickCopyLocale)) {
-			itemNode = document.createElement("menuitem");
-			itemNode.setAttribute("value", quickCopyLocale);
-			itemNode.setAttribute("label", quickCopyLocale);
-			popup.appendChild(itemNode);
-			menulist.selectedItem = itemNode;
-		}
-		
-		// add CSL locales to menu
-		for (var locale in cslLocales) {
-			var menuValue = locale;
-			var menuLabel = cslLocales[locale][0];
+		for (var i=0; i<cslLocalesKeys.length; i++) {
+			var menuValue = cslLocalesKeys[i];
+			var menuLabel = cslLocales[cslLocalesKeys[i]][0];
 			itemNode = document.createElement("menuitem");
 			itemNode.setAttribute("value", menuValue);
 			itemNode.setAttribute("label", menuLabel);
 			popup.appendChild(itemNode);
 			
-			if (menuValue == quickCopyLocale) {
+			if (menuValue == selectedLocale) {
 				menulist.selectedItem = itemNode;
 			}
 		}
@@ -274,9 +283,7 @@ Zotero_Preferences.Export = {
 	onsynctopreference: function () {
 		var menulist = document.getElementById("quickCopy-locale-menu");
 		var selectedLocale = menulist.selectedItem.value;
-		
-		var quickCopyLocale = "";
-		quickCopyLocale = Zotero.Prefs.get("export.quickCopy.locale");
+		var quickCopyLocale = Zotero.Prefs.get("export.quickCopy.locale");
 		
 		if (quickCopyLocale || (selectedLocale !== Zotero.locale)) {
 			Zotero.Prefs.set("export.quickCopy.locale", selectedLocale);
