@@ -233,7 +233,6 @@ Zotero_Preferences.Export = {
 		menulist.appendChild(popup);
 		
 		var quickCopyLocale = Zotero.Prefs.get("export.quickCopy.locale");
-		
 		var selectedLocale = "";
 		if (quickCopyLocale) {
 			selectedLocale = quickCopyLocale;
@@ -241,31 +240,32 @@ Zotero_Preferences.Export = {
 			selectedLocale = Zotero.locale;
 		}
 		
-		var cslLocales = {};
-		var cslLocalesKeys = [];
-		cslLocales = Zotero.Styles.locales;
+		var menuLocales = {};
+		var menuLocalesKeys = [];
+		var styleLocales = Zotero.Styles.locales;
 		
-		for (var locale in cslLocales) {
-			if (cslLocales.hasOwnProperty(locale)) {
-				cslLocalesKeys.push(locale);
+		for (var locale in styleLocales) {
+			if (styleLocales.hasOwnProperty(locale)) {
+				menuLocales[locale] = styleLocales[locale][0];
+				menuLocalesKeys.push(locale);
 			}
 		}
 		
-		cslLocalesKeys.sort();
+		menuLocalesKeys.sort();
 		
-		if (Zotero.locale && !cslLocales.hasOwnProperty(Zotero.locale)) {
-			cslLocales[Zotero.locale] = [Zotero.locale];
-			cslLocalesKeys.unshift(Zotero.locale);
+		if (Zotero.locale && !menuLocales.hasOwnProperty(Zotero.locale)) {
+			menuLocales[Zotero.locale] = Zotero.locale;
+			menuLocalesKeys.unshift(Zotero.locale);
 		}
-		if (quickCopyLocale && !cslLocales.hasOwnProperty(quickCopyLocale)) {
-			cslLocales[quickCopyLocale] = [quickCopyLocale];
-			cslLocalesKeys.unshift(quickCopyLocale);
+		if (quickCopyLocale && !menuLocales.hasOwnProperty(quickCopyLocale)) {
+			menuLocales[quickCopyLocale] = quickCopyLocale;
+			menuLocalesKeys.unshift(quickCopyLocale);
 		}
 		
 		var itemNode;
-		for (var i=0; i<cslLocalesKeys.length; i++) {
-			var menuValue = cslLocalesKeys[i];
-			var menuLabel = cslLocales[cslLocalesKeys[i]][0];
+		for (var i=0; i<menuLocalesKeys.length; i++) {
+			var menuValue = menuLocalesKeys[i];
+			var menuLabel = menuLocales[menuLocalesKeys[i]];
 			itemNode = document.createElement("menuitem");
 			itemNode.setAttribute("value", menuValue);
 			itemNode.setAttribute("label", menuLabel);
