@@ -277,19 +277,6 @@ Zotero_Preferences.Export = {
 		}
 		
 		menulist.setAttribute('preference', "pref-quickCopy-locale");
-		menulist.setAttribute('onsynctopreference', "return Zotero_Preferences.Export.onsynctopreference();");
-	},
-	
-	onsynctopreference: function () {
-		var menulist = document.getElementById("quickCopy-locale-menu");
-		var selectedLocale = menulist.selectedItem.value;
-		var quickCopyLocale = Zotero.Prefs.get("export.quickCopy.locale");
-		
-		if (quickCopyLocale || (selectedLocale !== Zotero.locale)) {
-			Zotero.Prefs.set("export.quickCopy.locale", selectedLocale);
-		}
-		
-		return selectedLocale;
 	},
 	
 	updateQuickCopyInstructions: function () {
