@@ -37,6 +37,7 @@ var Zotero_File_Interface_Bibliography = new function() {
 	
 	this.init = init;
 	this.styleChanged = styleChanged;
+	this.populateLocaleList = populateLocaleList;
 	this.acceptSelection = acceptSelection;
 	
 	/*
@@ -92,6 +93,11 @@ var Zotero_File_Interface_Bibliography = new function() {
 			listbox.ensureIndexIsVisible(selectIndex);
 			listbox.selectedIndex = selectIndex;
 		}, 0);
+		
+		// ONLY FOR bibliography.xul: locale menu (extend to rtfScan.xul and integrationDocPrefs.xul later)
+		if(document.getElementById("save-as-rtf")) {
+			populateLocaleList();
+		}
 		
 		// ONLY FOR bibliography.xul: export options
 		if(document.getElementById("save-as-rtf")) {
@@ -150,7 +156,60 @@ var Zotero_File_Interface_Bibliography = new function() {
 		// set style to false, in case this is cancelled
 		_io.style = false;
 	}
-	
+
+	/*
+	 * Builds the Quick Copy locale drop-down
+	 */
+	function populateLocaleList() {
+		var menulist = document.getElementById("locale-menu");
+		var popup = document.createElement('menupopup');
+		menulist.appendChild(popup);
+		
+		var lastLocale = Zotero.Prefs.get("export.lastLocale");
+		var selectedLocale = "";
+		if (lastLocale) {
+			selectedLocale = lastLocale;
+		} else {
+			selectedLocale = Zotero.locale;
+		}
+		
+		var menuLocales = {};
+		var menuLocalesKeys = [];
+		var styleLocales = Zotero.Styles.locales;
+		
+		for (var locale in styleLocales) {
+			if (styleLocales.hasOwnProperty(locale)) {
+				menuLocales[locale] = styleLocales[locale][0];
+				menuLocalesKeys.push(locale);
+			}
+		}
+		
+		menuLocalesKeys.sort();
+		
+		if (Zotero.locale && !menuLocales.hasOwnProperty(Zotero.locale)) {
+			menuLocales[Zotero.locale] = Zotero.locale;
+			menuLocalesKeys.unshift(Zotero.locale);
+		}
+		if (lastLocale && !menuLocales.hasOwnProperty(lastLocale)) {
+			menuLocales[lastLocale] = lastLocale;
+			menuLocalesKeys.unshift(lastLocale);
+		}
+		
+		var itemNode;
+		for (var i=0; i<menuLocalesKeys.length; i++) {
+			var menuValue = menuLocalesKeys[i];
+			var menuLabel = menuLocales[menuLocalesKeys[i]];
+			itemNode = document.createElement("menuitem");
+			itemNode.setAttribute("value", menuValue);
+			itemNode.setAttribute("label", menuLabel);
+			popup.appendChild(itemNode);
+			
+			if (menuValue == selectedLocale) {
+				menulist.selectedItem = itemNode;
+			}
+		}
+	}
+
 	/*
 	 * Called when style is changed
 	 */

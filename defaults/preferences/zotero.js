@@ -98,7 +98,6 @@ pref("extensions.zotero.report.combineChildItems", true);
 pref("extensions.zotero.export.lastTranslator", '14763d24-8ba0-45df-8f52-b8d1108e7ac9');
 pref("extensions.zotero.export.translatorSettings", 'true,false');
 pref("extensions.zotero.export.lastStyle", 'http://www.zotero.org/styles/chicago-note-bibliography');
-pref("extensions.zotero.export.lastLocale", "");
 pref("extensions.zotero.export.bibliographySettings", 'save-as-rtf');
 pref("extensions.zotero.export.displayCharsetOption", false);
 pref("extensions.zotero.export.citePaperJournalArticleURL", false);
