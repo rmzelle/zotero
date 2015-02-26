@@ -246,7 +246,7 @@ Zotero_Preferences.Export = {
 		
 		for (var locale in styleLocales) {
 			if (styleLocales.hasOwnProperty(locale)) {
-				menuLocales[locale] = styleLocales[locale][0];
+				menuLocales[locale] = styleLocales[locale];
 				menuLocalesKeys.push(locale);
 			}
 		}
