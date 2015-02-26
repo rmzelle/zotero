@@ -99,6 +99,13 @@ Zotero.Styles = new function() {
 		var localesLocation = "chrome://zotero/content/locale/csl/locales.json";
 		locales = JSON.parse(Zotero.File.getContentsFromURL(localesLocation));
 		
+		// only keep localized language name
+		for (var locale in locales) {
+			if (locales.hasOwnProperty(locale)) {
+				locales[locale] = locales[locale][0];
+			}
+		}
+		
 		this.locales = locales;
 	}
 	

@@ -18,7 +18,7 @@
 		</groupbox>
 		<groupbox>
 			<caption label="&zotero.bibliography.locale.label;"/>
-			<menulist id="locale-menu"/>
+			<menulist id="locale-menu" oncommand="Zotero_File_Interface_Bibliography.localeChanged(this.selectedItem.value)"/>
 		</groupbox>
 		<groupbox>
 			<caption label="&zotero.bibliography.outputMode;"/>
