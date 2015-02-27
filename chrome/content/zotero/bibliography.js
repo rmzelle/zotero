@@ -91,17 +91,14 @@ var Zotero_File_Interface_Bibliography = new function() {
 			selectIndex = 0;
 		}
 		
+		populateLocaleList();
+		
 		// Has to be async to work properly
 		window.setTimeout(function () {
 			listbox.ensureIndexIsVisible(selectIndex);
 			listbox.selectedIndex = selectIndex;
-		}, 0);
-		
-		// ONLY FOR bibliography.xul: locale menu (extend to rtfScan.xul and integrationDocPrefs.xul later)
-		if(document.getElementById("save-as-rtf")) {
-			populateLocaleList();
 			styleChanged();
-		}
+		}, 0);
 		
 		// ONLY FOR bibliography.xul: export options
 		if(document.getElementById("save-as-rtf")) {
@@ -223,46 +220,12 @@ var Zotero_File_Interface_Bibliography = new function() {
 	/*
 	 * Called when style is changed
 	 */
-	function styleChanged(index) {
-		// When called from init(), selectedItem isn't yet set
-		var selectedItem = "";
-		if (index) {
-			selectedItem = document.getElementById("style-listbox").getItemAtIndex(index);
-		}
-		else {
-			selectedItem = document.getElementById("style-listbox").selectedItem;
-		}
+	function styleChanged() {
+		var selectedItem = document.getElementById("style-listbox").selectedItem;
+		var selectedStyle = selectedItem.getAttribute('value');
+		var selectedStyleObj = Zotero.Styles.get(selectedStyle);
 		
-		var selectedStyle = selectedItem.getAttribute('value'),
-			selectedStyleObj = Zotero.Styles.get(selectedStyle);
-		
-		// For styles with a default-locale, disable locale menulist and show locale
-		var menulist = document.getElementById("locale-menu");
-		
-		// If not null, then menulist is extended with the default-locale value
-		// of the previously selected style
-		if (defaultStyleLocale) {
-			// Reset menulist
-			menulist.removeItemAt(0);
-			defaultStyleLocale = "";
-		}
-		
-		if (selectedStyleObj.locale) {
-			defaultStyleLocale = selectedStyleObj.locale;
-			
-			//add default-locale to menulist
-			var localeLabel = defaultStyleLocale;
-			if (Zotero.Styles.locales.hasOwnProperty(defaultStyleLocale)) {
-				localeLabel = Zotero.Styles.locales[defaultStyleLocale];
-			}
-			
-			menulist.insertItemAt(0, localeLabel, defaultStyleLocale);
-			menulist.selectedIndex = 0;
-			menulist.disabled = true;
-		} else {
-			menulist.value = selectedLocale;
-			menulist.disabled = false;
-		}
+		updateLocaleMenu(selectedStyleObj);
 		
 		//
 		// For integrationDocPrefs.xul
@@ -303,6 +266,39 @@ var Zotero_File_Interface_Bibliography = new function() {
 		}
 
 		window.sizeToContent();
+	}
+
+	/*
+	 * Update locale menulist when style is changed
+	 */
+	function updateLocaleMenu(selectedStyle) {
+		// For styles with a default-locale, disable locale menulist and show locale
+		var menulist = document.getElementById("locale-menu");
+		
+		// If not null, then menulist is extended with the default-locale value
+		// of the previously selected style
+		if (defaultStyleLocale) {
+			// Reset menulist
+			menulist.removeItemAt(0);
+			defaultStyleLocale = "";
+		}
+		
+		if (selectedStyle.locale) {
+			defaultStyleLocale = selectedStyle.locale;
+			
+			//add default-locale to menulist
+			var localeLabel = defaultStyleLocale;
+			if (Zotero.Styles.locales.hasOwnProperty(defaultStyleLocale)) {
+				localeLabel = Zotero.Styles.locales[defaultStyleLocale];
+			}
+			
+			menulist.insertItemAt(0, localeLabel, defaultStyleLocale);
+			menulist.selectedIndex = 0;
+			menulist.disabled = true;
+		} else {
+			menulist.value = selectedLocale;
+			menulist.disabled = false;
+		}
 	}
 
 	function acceptSelection() {

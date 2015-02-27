@@ -419,8 +419,12 @@ var Zotero_File_Interface = new function() {
 		var clipboardService = Components.classes["@mozilla.org/widget/clipboard;1"].
 							   getService(Components.interfaces.nsIClipboard);
 		var style = Zotero.Styles.get(style);
-		var cslEngine = style.getCiteProc();
-        
+		
+		// determine locale preference
+		var locale = Zotero.Prefs.get('export.lastLocale');
+		
+		var cslEngine = style.getCiteProc(locale);
+		
 		// add HTML
  		var bibliography = Zotero.Cite.makeFormattedBibliographyOrCitationList(cslEngine, items, "html", asCitations);
 		var str = Components.classes["@mozilla.org/supports-string;1"].
@@ -457,7 +461,10 @@ var Zotero_File_Interface = new function() {
 		var clipboardService = Components.classes["@mozilla.org/widget/clipboard;1"].
 							   getService(Components.interfaces.nsIClipboard);
 		
-		var style = Zotero.Styles.get(style).getCiteProc();
+		// determine locale preference
+		var locale = Zotero.Prefs.get('export.lastLocale');
+		
+		var style = Zotero.Styles.get(style).getCiteProc(locale);
 		var citation = {"citationItems":[{id:item.id} for each(item in items)], properties:{}};
 		
 		// add HTML
@@ -510,6 +517,9 @@ var Zotero_File_Interface = new function() {
 			format = "rtf";
 		}
 		
+		// determine locale preference
+		var locale = Zotero.Prefs.get('export.lastLocale');
+		
 		// generate bibliography
 		try {
 			if(io.method == 'copy-to-clipboard') {
@@ -517,7 +527,7 @@ var Zotero_File_Interface = new function() {
 			}
 			else {
 				var style = Zotero.Styles.get(io.style);
-				var cslEngine = style.getCiteProc();
+				var cslEngine = style.getCiteProc(locale);
 				var bibliography = Zotero.Cite.makeFormattedBibliographyOrCitationList(cslEngine,
 					items, format, io.mode === "citations");
 			}
