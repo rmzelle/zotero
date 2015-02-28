@@ -328,16 +328,19 @@ Zotero.QuickCopy = new function() {
 				return content;
 			}
 			
+			// determine locale preference
+			var locale = Zotero.Prefs.get('export.quickCopy.locale');
+			
 			// Copy citations if shift key pressed
 			if (modified) {
-				var csl = Zotero.Styles.get(format).getCiteProc();
+				var csl = Zotero.Styles.get(format).getCiteProc(locale);
 				csl.updateItems([item.id for each(item in items)]);
 				var citation = {citationItems:[{id:item.id} for each(item in items)], properties:{}};
 				var html = csl.previewCitationCluster(citation, [], [], "html"); 
 				var text = csl.previewCitationCluster(citation, [], [], "text"); 
 			} else {
 				var style = Zotero.Styles.get(format);
-				var cslEngine = style.getCiteProc();
+				var cslEngine = style.getCiteProc(locale);
  				var html = Zotero.Cite.makeFormattedBibliographyOrCitationList(cslEngine, items, "html");
 				var text = Zotero.Cite.makeFormattedBibliographyOrCitationList(cslEngine, items, "text");
 			}

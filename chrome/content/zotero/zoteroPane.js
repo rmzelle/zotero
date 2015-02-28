@@ -1844,15 +1844,18 @@ var ZoteroPane = new function()
 		}
 		
 		var url = (window.content && window.content.location ? window.content.location.href : null);
-		var [mode, format] = Zotero.QuickCopy.getFormatFromURL(url).split('=');
+		var [mode, style] = Zotero.QuickCopy.getFormatFromURL(url).split('=');
 		var [mode, contentType] = mode.split('/');
+		
+		// determine locale preference
+		var locale = Zotero.Prefs.get('export.quickCopy.locale');
 		
 		if (mode == 'bibliography') {
 			if (asCitations) {
-				Zotero_File_Interface.copyCitationToClipboard(items, format, contentType == 'html');
+				Zotero_File_Interface.copyCitationToClipboard(items, style, locale, contentType == 'html');
 			}
 			else {
-				Zotero_File_Interface.copyItemsToClipboard(items, format, contentType == 'html');
+				Zotero_File_Interface.copyItemsToClipboard(items, style, locale, contentType == 'html');
 			}
 		}
 		else if (mode == 'export') {
@@ -1861,7 +1864,7 @@ var ZoteroPane = new function()
 				return;
 			}
 			else {
-				Zotero_File_Interface.exportItemsToClipboard(items, format);
+				Zotero_File_Interface.exportItemsToClipboard(items, style);
 			}
 		}
 	}

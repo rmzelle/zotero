@@ -412,17 +412,13 @@ var Zotero_File_Interface = new function() {
 	 *
 	 * Does not check that items are actual references (and not notes or attachments)
 	 */
-	function copyItemsToClipboard(items, style, asHTML, asCitations) {
+	function copyItemsToClipboard(items, style, locale, asHTML, asCitations) {
 		// copy to clipboard
 		var transferable = Components.classes["@mozilla.org/widget/transferable;1"].
 						   createInstance(Components.interfaces.nsITransferable);
 		var clipboardService = Components.classes["@mozilla.org/widget/clipboard;1"].
 							   getService(Components.interfaces.nsIClipboard);
 		var style = Zotero.Styles.get(style);
-		
-		// determine locale preference
-		var locale = Zotero.Prefs.get('export.lastLocale');
-		
 		var cslEngine = style.getCiteProc(locale);
 		
 		// add HTML
@@ -454,15 +450,12 @@ var Zotero_File_Interface = new function() {
 	 *
 	 * if |asHTML| is true, copy HTML source as text
 	 */
-	function copyCitationToClipboard(items, style, asHTML) {
+	function copyCitationToClipboard(items, style, locale, asHTML) {
 		// copy to clipboard
 		var transferable = Components.classes["@mozilla.org/widget/transferable;1"].
 						   createInstance(Components.interfaces.nsITransferable);
 		var clipboardService = Components.classes["@mozilla.org/widget/clipboard;1"].
 							   getService(Components.interfaces.nsIClipboard);
-		
-		// determine locale preference
-		var locale = Zotero.Prefs.get('export.lastLocale');
 		
 		var style = Zotero.Styles.get(style).getCiteProc(locale);
 		var citation = {"citationItems":[{id:item.id} for each(item in items)], properties:{}};
@@ -523,7 +516,7 @@ var Zotero_File_Interface = new function() {
 		// generate bibliography
 		try {
 			if(io.method == 'copy-to-clipboard') {
-				copyItemsToClipboard(items, io.style, false, io.mode === "citations");
+				copyItemsToClipboard(items, io.style, locale, false, io.mode === "citations");
 			}
 			else {
 				var style = Zotero.Styles.get(io.style);

@@ -501,7 +501,8 @@ Zotero.Style = function(arg) {
 
 /**
  * Get a citeproc-js CSL.Engine instance
- * @param {Boolean} useAutomaticJournalAbbreviations Whether to automatically abbreviate titles
+ * @param {String} locale Locale code
+ * @param {Boolean} automaticJournalAbbreviations Whether to automatically abbreviate titles
  */
 Zotero.Style.prototype.getCiteProc = function(locale, automaticJournalAbbreviations) {
 	if(!locale) {
