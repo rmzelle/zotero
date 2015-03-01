@@ -38,7 +38,6 @@
 	title="&styles.editor;">
 	
 	<script src="chrome://zotero/content/include.js"/>
-	<script src="chrome://zotero/content/preferences/preferences_export.js"/>
 	<script src="csledit.js"/>
 	
 	<vbox flex="1">

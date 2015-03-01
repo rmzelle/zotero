@@ -228,7 +228,8 @@ Zotero_Preferences.Export = {
 	 * Builds the Quick Copy locale drop-down
 	 */
 	populateQuickCopyLocaleList: function () {
-		Zotero.Styles.populateLocaleList(document, "locale-menu");
+		var quickCopyLocale = Zotero.Prefs.get("export.quickCopy.locale");
+		Zotero.Styles.populateLocaleList(document, "locale-menu", quickCopyLocale);
 		
 		var menulist = document.getElementById("locale-menu");
 		menulist.setAttribute('preference', "pref-quickCopy-locale");

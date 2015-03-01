@@ -31,8 +31,8 @@ var Zotero_CSL_Preview = new function() {
 	
 	function init() { 
 		//refresh();
-		var menulist = document.getElementById("locale-menu");
-		Zotero.Styles.populateLocaleList(document, "locale-menu");
+		var quickCopyLocale = Zotero.Prefs.get("export.quickCopy.locale");
+		Zotero.Styles.populateLocaleList(document, "locale-menu", quickCopyLocale);
 		
 		var iframe = document.getElementById('zotero-csl-preview-box');
 		iframe.contentDocument.documentElement.innerHTML = '<html><head><title></title></head><body><p>' + Zotero.getString('styles.preview.instructions') + '</p></body></html>';

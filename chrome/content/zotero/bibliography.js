@@ -162,52 +162,8 @@ var Zotero_File_Interface_Bibliography = new function() {
 	 * Builds the locale drop-down
 	 */
 	function populateLocaleList() {
-		var menulist = document.getElementById("locale-menu");
-		var popup = document.createElement('menupopup');
-		menulist.appendChild(popup);
-		
 		var lastLocale = Zotero.Prefs.get("export.lastLocale");
-		if (lastLocale) {
-			selectedLocale = lastLocale;
-		} else {
-			selectedLocale = Zotero.locale;
-		}
-		
-		var menuLocales = {};
-		var menuLocalesKeys = [];
-		var styleLocales = Zotero.Styles.locales;
-		
-		for (var locale in styleLocales) {
-			if (styleLocales.hasOwnProperty(locale)) {
-				menuLocales[locale] = styleLocales[locale];
-				menuLocalesKeys.push(locale);
-			}
-		}
-		
-		menuLocalesKeys.sort();
-		
-		if (Zotero.locale && !menuLocales.hasOwnProperty(Zotero.locale)) {
-			menuLocales[Zotero.locale] = Zotero.locale;
-			menuLocalesKeys.unshift(Zotero.locale);
-		}
-		if (lastLocale && !menuLocales.hasOwnProperty(lastLocale)) {
-			menuLocales[lastLocale] = lastLocale;
-			menuLocalesKeys.unshift(lastLocale);
-		}
-		
-		var itemNode;
-		for (var i=0; i<menuLocalesKeys.length; i++) {
-			var menuValue = menuLocalesKeys[i];
-			var menuLabel = menuLocales[menuLocalesKeys[i]];
-			itemNode = document.createElement("menuitem");
-			itemNode.setAttribute("value", menuValue);
-			itemNode.setAttribute("label", menuLabel);
-			popup.appendChild(itemNode);
-			
-			if (menuValue == selectedLocale) {
-				menulist.selectedItem = itemNode;
-			}
-		}
+		selectedLocale = Zotero.Styles.populateLocaleList(document, "locale-menu", lastLocale);
 	}
 
 	/*

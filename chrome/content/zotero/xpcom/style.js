@@ -427,17 +427,16 @@ Zotero.Styles = new function() {
 	 * Populate Quick Copy-type menulist with locales
 	 * (for locale menulists that don't update with style selection)
 	 */
-	this.populateLocaleList = function(doc, menulistID) {
+	this.populateLocaleList = function(doc, menulistID, prefLocale) {
 		var menulist = doc.getElementById(menulistID);
 		var popup = doc.createElement('menupopup');
 		menulist.appendChild(popup);
 		
-		var quickCopyLocale = Zotero.Prefs.get("export.quickCopy.locale");
-		var selectedLocale = "";
-		if (quickCopyLocale) {
-			selectedLocale = quickCopyLocale;
+		var desiredLocale = "";
+		if (prefLocale) {
+			desiredLocale = prefLocale;
 		} else {
-			selectedLocale = Zotero.locale;
+			desiredLocale = Zotero.locale;
 		}
 		
 		var menuLocales = {};
@@ -457,9 +456,9 @@ Zotero.Styles = new function() {
 			menuLocales[Zotero.locale] = Zotero.locale;
 			menuLocalesKeys.unshift(Zotero.locale);
 		}
-		if (quickCopyLocale && !menuLocales.hasOwnProperty(quickCopyLocale)) {
-			menuLocales[quickCopyLocale] = quickCopyLocale;
-			menuLocalesKeys.unshift(quickCopyLocale);
+		if (prefLocale && !menuLocales.hasOwnProperty(prefLocale)) {
+			menuLocales[prefLocale] = prefLocale;
+			menuLocalesKeys.unshift(prefLocale);
 		}
 		
 		var itemNode;
@@ -471,10 +470,12 @@ Zotero.Styles = new function() {
 			itemNode.setAttribute("label", menuLabel);
 			popup.appendChild(itemNode);
 			
-			if (menuValue == selectedLocale) {
+			if (menuValue == desiredLocale) {
 				menulist.selectedItem = itemNode;
 			}
 		}
+		
+		return desiredLocale;
 	};
 }
 
