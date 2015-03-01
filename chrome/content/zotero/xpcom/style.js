@@ -422,6 +422,60 @@ Zotero.Styles = new function() {
 			}
 		});
 	}
+	
+	/**
+	 * Populate Quick Copy-type menulist with locales
+	 * (for locale menulists that don't update with style selection)
+	 */
+	this.populateLocaleList = function(doc, menulistID) {
+		var menulist = doc.getElementById(menulistID);
+		var popup = doc.createElement('menupopup');
+		menulist.appendChild(popup);
+		
+		var quickCopyLocale = Zotero.Prefs.get("export.quickCopy.locale");
+		var selectedLocale = "";
+		if (quickCopyLocale) {
+			selectedLocale = quickCopyLocale;
+		} else {
+			selectedLocale = Zotero.locale;
+		}
+		
+		var menuLocales = {};
+		var menuLocalesKeys = [];
+		var styleLocales = Zotero.Styles.locales;
+		
+		for (var locale in styleLocales) {
+			if (styleLocales.hasOwnProperty(locale)) {
+				menuLocales[locale] = styleLocales[locale];
+				menuLocalesKeys.push(locale);
+			}
+		}
+		
+		menuLocalesKeys.sort();
+		
+		if (Zotero.locale && !menuLocales.hasOwnProperty(Zotero.locale)) {
+			menuLocales[Zotero.locale] = Zotero.locale;
+			menuLocalesKeys.unshift(Zotero.locale);
+		}
+		if (quickCopyLocale && !menuLocales.hasOwnProperty(quickCopyLocale)) {
+			menuLocales[quickCopyLocale] = quickCopyLocale;
+			menuLocalesKeys.unshift(quickCopyLocale);
+		}
+		
+		var itemNode;
+		for (var i=0; i<menuLocalesKeys.length; i++) {
+			var menuValue = menuLocalesKeys[i];
+			var menuLabel = menuLocales[menuLocalesKeys[i]];
+			itemNode = doc.createElement("menuitem");
+			itemNode.setAttribute("value", menuValue);
+			itemNode.setAttribute("label", menuLabel);
+			popup.appendChild(itemNode);
+			
+			if (menuValue == selectedLocale) {
+				menulist.selectedItem = itemNode;
+			}
+		}
+	};
 }
 
 /**

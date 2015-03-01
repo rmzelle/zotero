@@ -30,6 +30,9 @@ var Zotero_CSL_Editor = new function() {
 	this.generateBibliography = generateBibliography;
 	this.refresh = refresh;
 	function init() {
+		var menulist = document.getElementById("locale-menu");
+		Zotero.Styles.populateLocaleList(document, "locale-menu");
+		
 		var cslList = document.getElementById('zotero-csl-list');
 		if (cslList.getAttribute('initialized') == 'true') {
 			if (currentStyle) {
@@ -130,10 +133,12 @@ var Zotero_CSL_Editor = new function() {
 			iframe.contentDocument.documentElement.innerHTML = '<html><head><title></title></head><body><p style="color: red">' + Zotero.getString('styles.editor.warning.noItems') + '</p></body></html>';
 			return;
 		}
+		
+		var locale = document.getElementById("locale-menu").selectedItem.value;
 		var styleObject, styleEngine;
 		try {
 			styleObject = new Zotero.Style(str);
-			styleEngine = styleObject.getCiteProc();
+			styleEngine = styleObject.getCiteProc(locale);
 		} catch(e) {
 			iframe.contentDocument.documentElement.innerHTML = '<div>' + Zotero.getString('styles.editor.warning.parseError') + '</div><div>'+e+'</div>';
 			throw e;

@@ -159,7 +159,7 @@ var Zotero_File_Interface_Bibliography = new function() {
 	}
 
 	/*
-	 * Builds the Quick Copy locale drop-down
+	 * Builds the locale drop-down
 	 */
 	function populateLocaleList() {
 		var menulist = document.getElementById("locale-menu");

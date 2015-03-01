@@ -53,8 +53,8 @@
 			<separator class="thin"/>
 			
 			<hbox align="center">
-				<label value="&zotero.preferences.quickCopy.locale;" control="quickCopy-locale-menu"/>
-				<menulist id="quickCopy-locale-menu"/>
+				<label value="&zotero.preferences.quickCopy.locale;" control="locale-menu"/>
+				<menulist id="locale-menu"/>
 			</hbox>
 			
 			<separator class="thin"/>
