@@ -95,18 +95,27 @@ Zotero.Styles = new function() {
 		}
 		
 		// load available CSL locales
-		var locales = null;
+		var localeFile = {};
+		var locales = {};
+		var primaryDialects = {};
 		var localesLocation = "chrome://zotero/content/locale/csl/locales.json";
-		locales = JSON.parse(Zotero.File.getContentsFromURL(localesLocation));
+		localeFile = JSON.parse(Zotero.File.getContentsFromURL(localesLocation));
+		
+		for (var dialect in localeFile["primary-dialects"]) {
+			if (localeFile["primary-dialects"].hasOwnProperty(dialect)) {
+				primaryDialects[dialect] = localeFile["primary-dialects"][dialect];
+			}
+		}
 		
 		// only keep localized language name
-		for (var locale in locales) {
-			if (locales.hasOwnProperty(locale)) {
-				locales[locale] = locales[locale][0];
+		for (var locale in localeFile["language-names"]) {
+			if (localeFile["language-names"].hasOwnProperty(locale)) {
+				locales[locale] = localeFile["language-names"][locale][0];
 			}
 		}
 		
 		this.locales = locales;
+		this.primaryDialects = primaryDialects;
 	}
 	
 	/**
@@ -433,6 +442,16 @@ Zotero.Styles = new function() {
 		menulist.appendChild(popup);
 		
 		var desiredLocale = "";
+		var ZoteroFallbackLocale = Zotero.locale;
+		
+		// Primary dialect conversion (e.g. "en" to "en-US")
+		if (Zotero.Styles.primaryDialects.hasOwnProperty(prefLocale)) {
+			prefLocale = Zotero.Styles.primaryDialects[prefLocale];
+		}
+		if (Zotero.Styles.primaryDialects.hasOwnProperty(ZoteroFallbackLocale)) {
+			ZoteroFallbackLocale = Zotero.Styles.primaryDialects[ZoteroFallbackLocale];
+		}
+		
 		if (prefLocale) {
 			desiredLocale = prefLocale;
 		} else {
