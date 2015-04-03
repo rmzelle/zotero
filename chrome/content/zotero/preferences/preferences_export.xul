@@ -47,16 +47,14 @@
 			
 			<separator/>
 			
-			<hbox align="center">
-				<label value="&zotero.preferences.quickCopy.defaultOutputFormat;" control="quickCopy-menu"/>
-				<menulist id="zotero-quickCopy-menu"/>
-			</hbox>
+			<label value="&zotero.preferences.quickCopy.defaultOutputFormat;" control="quickCopy-menu"/>
+			<menulist id="zotero-quickCopy-menu"/>
 			
 			<hbox align="center">
 				<label value="&zotero.preferences.quickCopy.locale;" control="locale-menu"/>
 				<menulist id="locale-menu"/>
 				
-				<spacer flex="1"/>
+				<separator orient="vertical" width="15px"/>
 				
 				<checkbox id="zotero-quickCopy-copyAsHTML" label="&zotero.preferences.quickCopy.copyAsHTML;"
 					oncommand="Zotero_Preferences.Export.buildQuickCopyFormatDropDown(document.getElementById('zotero-quickCopy-menu'), this.checked ? 'html' : '');"/>
