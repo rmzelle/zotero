@@ -47,20 +47,20 @@
 			
 			<separator/>
 			
-			<label value="&zotero.preferences.quickCopy.defaultOutputFormat;" control="quickCopy-menu"/>
-			<menulist id="zotero-quickCopy-menu"/>
-			
-			<separator class="thin"/>
+			<hbox align="center">
+				<label value="&zotero.preferences.quickCopy.defaultOutputFormat;" control="quickCopy-menu"/>
+				<menulist id="zotero-quickCopy-menu"/>
+			</hbox>
 			
 			<hbox align="center">
 				<label value="&zotero.preferences.quickCopy.locale;" control="locale-menu"/>
 				<menulist id="locale-menu"/>
+				
+				<spacer flex="1"/>
+				
+				<checkbox id="zotero-quickCopy-copyAsHTML" label="&zotero.preferences.quickCopy.copyAsHTML;"
+					oncommand="Zotero_Preferences.Export.buildQuickCopyFormatDropDown(document.getElementById('zotero-quickCopy-menu'), this.checked ? 'html' : '');"/>
 			</hbox>
-			
-			<separator class="thin"/>
-			
-			<checkbox id="zotero-quickCopy-copyAsHTML" label="&zotero.preferences.quickCopy.copyAsHTML;"
-				oncommand="Zotero_Preferences.Export.buildQuickCopyFormatDropDown(document.getElementById('zotero-quickCopy-menu'), this.checked ? 'html' : '');"/>
 			
 			<vbox id="zotero-prefpane-export-siteSettings"/>
 			
