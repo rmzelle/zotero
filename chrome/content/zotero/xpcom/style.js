@@ -101,14 +101,14 @@ Zotero.Styles = new function() {
 		var localesLocation = "chrome://zotero/content/locale/csl/locales.json";
 		localeFile = JSON.parse(Zotero.File.getContentsFromURL(localesLocation));
 		
-		for (var dialect in localeFile["primary-dialects"]) {
+		for (let dialect in localeFile["primary-dialects"]) {
 			if (localeFile["primary-dialects"].hasOwnProperty(dialect)) {
 				primaryDialects[dialect] = localeFile["primary-dialects"][dialect];
 			}
 		}
 		
 		// only keep localized language name
-		for (var locale in localeFile["language-names"]) {
+		for (let locale in localeFile["language-names"]) {
 			if (localeFile["language-names"].hasOwnProperty(locale)) {
 				locales[locale] = localeFile["language-names"][locale][0];
 			}
@@ -464,7 +464,7 @@ Zotero.Styles = new function() {
 		var menuLocalesKeys = [];
 		var styleLocales = Zotero.Styles.locales;
 		
-		for (var locale in styleLocales) {
+		for (let locale in styleLocales) {
 			if (styleLocales.hasOwnProperty(locale)) {
 				menuLocales[locale] = styleLocales[locale];
 				menuLocalesKeys.push(locale);
@@ -483,7 +483,7 @@ Zotero.Styles = new function() {
 		}
 		
 		var itemNode;
-		for (var i=0; i<menuLocalesKeys.length; i++) {
+		for (let i=0; i<menuLocalesKeys.length; i++) {
 			var menuValue = menuLocalesKeys[i];
 			var menuLabel = menuLocales[menuLocalesKeys[i]];
 			itemNode = doc.createElement("menuitem");

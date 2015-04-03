@@ -206,7 +206,7 @@ var Zotero_File_Interface_Bibliography = new function() {
 		
 		// Change label to "Citation" or "Note" depending on style class
 		if(document.getElementById("citations")) {
-			var label = "";
+			let label = "";
 			if(Zotero.Styles.get(selectedStyle).class == "note") {
 				label = Zotero.getString('citation.notes');
 			} else {
@@ -237,7 +237,7 @@ var Zotero_File_Interface_Bibliography = new function() {
 			defaultStyleLocale = selectedStyle.locale;
 			
 			//add default-locale to menulist
-			var localeLabel = defaultStyleLocale;
+			let localeLabel = defaultStyleLocale;
 			if (Zotero.Styles.locales.hasOwnProperty(defaultStyleLocale)) {
 				localeLabel = Zotero.Styles.locales[defaultStyleLocale];
 			}
