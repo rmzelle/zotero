@@ -37,17 +37,11 @@ var Zotero_File_Interface_Bibliography = new function() {
 	var selectedLocale = "";
 	var defaultStyleLocale = "";
 	
-	this.init = init;
-	this.styleChanged = styleChanged;
-	this.populateLocaleList = populateLocaleList;
-	this.localeChanged = localeChanged;
-	this.acceptSelection = acceptSelection;
-	
 	/*
 	 * Initialize some variables and prepare event listeners for when chrome is done
 	 * loading
 	 */
-	function init() {
+	this.init = function () {
 		// Set font size from pref
 		// Affects bibliography.xul and integrationDocPrefs.xul
 		var bibContainer = document.getElementById("zotero-bibliography-container");
@@ -156,27 +150,27 @@ var Zotero_File_Interface_Bibliography = new function() {
 		
 		// set style to false, in case this is cancelled
 		_io.style = false;
-	}
+	};
 
 	/*
 	 * Builds the locale drop-down
 	 */
-	function populateLocaleList() {
+	this.populateLocaleList = function () {
 		var lastLocale = Zotero.Prefs.get("export.lastLocale");
 		selectedLocale = Zotero.Styles.populateLocaleList(document, "locale-menu", lastLocale);
-	}
+	};
 
 	/*
 	 * Called when locale is changed
 	 */
-	function localeChanged(selectedValue) {
+	this.localeChanged = function (selectedValue) {
 		selectedLocale = selectedValue;
-	}
+	};
 
 	/*
 	 * Called when style is changed
 	 */
-	function styleChanged() {
+	this.styleChanged = function () {
 		var selectedItem = document.getElementById("style-listbox").selectedItem;
 		var selectedStyle = selectedItem.getAttribute('value');
 		var selectedStyleObj = Zotero.Styles.get(selectedStyle);
@@ -222,7 +216,7 @@ var Zotero_File_Interface_Bibliography = new function() {
 		}
 
 		window.sizeToContent();
-	}
+	};
 
 	/*
 	 * Update locale menulist when style is changed
@@ -257,7 +251,7 @@ var Zotero_File_Interface_Bibliography = new function() {
 		}
 	}
 
-	function acceptSelection() {
+	this.acceptSelection = function () {
 		// collect code
 		_io.style = document.getElementById("style-listbox").selectedItem.value;
 		_io.locale = selectedLocale;
@@ -290,5 +284,5 @@ var Zotero_File_Interface_Bibliography = new function() {
 		
 		// save locale
 		Zotero.Prefs.set("export.lastLocale", selectedLocale);
-	}
+	};
 }
