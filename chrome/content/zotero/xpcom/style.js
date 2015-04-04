@@ -102,14 +102,14 @@ Zotero.Styles = new function() {
 		localeFile = JSON.parse(Zotero.File.getContentsFromURL(localesLocation));
 		
 		for (let dialect in localeFile["primary-dialects"]) {
-			if (localeFile["primary-dialects"].hasOwnProperty(dialect)) {
+			if (localeFile["primary-dialects"][dialect] !== undefined) {
 				primaryDialects[dialect] = localeFile["primary-dialects"][dialect];
 			}
 		}
 		
 		// only keep localized language name
 		for (let locale in localeFile["language-names"]) {
-			if (localeFile["language-names"].hasOwnProperty(locale)) {
+			if (localeFile["language-names"][locale] !== undefined) {
 				locales[locale] = localeFile["language-names"][locale][0];
 			}
 		}
@@ -447,10 +447,10 @@ Zotero.Styles = new function() {
 		var ZoteroFallbackLocale = Zotero.locale;
 		
 		// Primary dialect conversion (e.g. "en" to "en-US")
-		if (Zotero.Styles.primaryDialects.hasOwnProperty(prefLocale)) {
+		if (Zotero.Styles.primaryDialects[prefLocale] !== undefined) {
 			prefLocale = Zotero.Styles.primaryDialects[prefLocale];
 		}
-		if (Zotero.Styles.primaryDialects.hasOwnProperty(ZoteroFallbackLocale)) {
+		if (Zotero.Styles.primaryDialects[ZoteroFallbackLocale] !== undefined) {
 			ZoteroFallbackLocale = Zotero.Styles.primaryDialects[ZoteroFallbackLocale];
 		}
 		
@@ -465,7 +465,7 @@ Zotero.Styles = new function() {
 		var styleLocales = Zotero.Styles.locales;
 		
 		for (let locale in styleLocales) {
-			if (styleLocales.hasOwnProperty(locale)) {
+			if (styleLocales[locale] !== undefined) {
 				menuLocales[locale] = styleLocales[locale];
 				menuLocalesKeys.push(locale);
 			}
@@ -473,11 +473,11 @@ Zotero.Styles = new function() {
 		
 		menuLocalesKeys.sort();
 		
-		if (Zotero.locale && !menuLocales.hasOwnProperty(Zotero.locale)) {
+		if (Zotero.locale && menuLocales[Zotero.locale] === undefined) {
 			menuLocales[Zotero.locale] = Zotero.locale;
 			menuLocalesKeys.unshift(Zotero.locale);
 		}
-		if (prefLocale && !menuLocales.hasOwnProperty(prefLocale)) {
+		if (prefLocale && menuLocales[prefLocale] === undefined) {
 			menuLocales[prefLocale] = prefLocale;
 			menuLocalesKeys.unshift(prefLocale);
 		}

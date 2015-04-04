@@ -85,13 +85,13 @@ var Zotero_File_Interface_Bibliography = new function() {
 			selectIndex = 0;
 		}
 		
-		populateLocaleList();
+		this.populateLocaleList();
 		
 		// Has to be async to work properly
 		window.setTimeout(function () {
 			listbox.ensureIndexIsVisible(selectIndex);
 			listbox.selectedIndex = selectIndex;
-			styleChanged();
+			this.styleChanged();
 		}, 0);
 		
 		// ONLY FOR bibliography.xul: export options
@@ -238,7 +238,7 @@ var Zotero_File_Interface_Bibliography = new function() {
 			
 			//add default-locale to menulist
 			let localeLabel = defaultStyleLocale;
-			if (Zotero.Styles.locales.hasOwnProperty(defaultStyleLocale)) {
+			if (Zotero.Styles.locales[defaultStyleLocale] !== undefined) {
 				localeLabel = Zotero.Styles.locales[defaultStyleLocale];
 			}
 			
