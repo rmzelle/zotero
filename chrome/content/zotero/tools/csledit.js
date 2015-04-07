@@ -31,7 +31,9 @@ var Zotero_CSL_Editor = new function() {
 	this.refresh = refresh;
 	function init() {
 		var quickCopyLocale = Zotero.Prefs.get("export.quickCopy.locale");
-		Zotero.Styles.populateLocaleList(document, "locale-menu", quickCopyLocale);
+		var menulist = document.getElementById("locale-menu");
+		
+		Zotero.Styles.populateLocaleList(menulist, quickCopyLocale);
 		
 		var cslList = document.getElementById('zotero-csl-list');
 		if (cslList.getAttribute('initialized') == 'true') {

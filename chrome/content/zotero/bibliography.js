@@ -157,7 +157,9 @@ var Zotero_File_Interface_Bibliography = new function() {
 	 */
 	this.populateLocaleList = function () {
 		var lastLocale = Zotero.Prefs.get("export.lastLocale");
-		selectedLocale = Zotero.Styles.populateLocaleList(document, "locale-menu", lastLocale);
+		var menulist = document.getElementById("locale-menu");
+		
+		selectedLocale = Zotero.Styles.populateLocaleList(menulist, lastLocale);
 	};
 
 	/*

@@ -229,9 +229,9 @@ Zotero_Preferences.Export = {
 	 */
 	populateQuickCopyLocaleList: function () {
 		var quickCopyLocale = Zotero.Prefs.get("export.quickCopy.locale");
-		Zotero.Styles.populateLocaleList(document, "locale-menu", quickCopyLocale);
-		
 		var menulist = document.getElementById("locale-menu");
+		
+		Zotero.Styles.populateLocaleList(menulist, quickCopyLocale);
 		menulist.setAttribute('preference', "pref-quickCopy-locale");
 	},
 	

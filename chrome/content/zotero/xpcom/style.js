@@ -436,10 +436,10 @@ Zotero.Styles = new function() {
 	 * Populate Quick Copy-type menulist with locales
 	 * (for locale menulists that don't update with style selection)
 	 */
-	this.populateLocaleList = function(doc, menulistID, prefLocale) {
+	this.populateLocaleList = function(menulist, prefLocale) {
 		if(!_initialized) this.init();
 		
-		var menulist = doc.getElementById(menulistID);
+		var doc = menulist.ownerDocument;
 		var popup = doc.createElement('menupopup');
 		menulist.appendChild(popup);
 		
