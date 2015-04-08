@@ -91,7 +91,7 @@ var Zotero_File_Interface_Bibliography = new function() {
 		window.setTimeout(function () {
 			listbox.ensureIndexIsVisible(selectIndex);
 			listbox.selectedIndex = selectIndex;
-			this.styleChanged();
+			Zotero_File_Interface_Bibliography.styleChanged();
 		}, 0);
 		
 		// ONLY FOR bibliography.xul: export options
