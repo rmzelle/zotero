@@ -444,20 +444,20 @@ Zotero.Styles = new function() {
 		menulist.appendChild(popup);
 		
 		var desiredLocale = "";
-		var ZoteroFallbackLocale = Zotero.locale;
+		var fallbackLocale = Zotero.locale;
 		
 		// Primary dialect conversion (e.g. "en" to "en-US")
 		if (Zotero.Styles.primaryDialects[prefLocale] !== undefined) {
 			prefLocale = Zotero.Styles.primaryDialects[prefLocale];
 		}
-		if (Zotero.Styles.primaryDialects[ZoteroFallbackLocale] !== undefined) {
-			ZoteroFallbackLocale = Zotero.Styles.primaryDialects[ZoteroFallbackLocale];
+		if (Zotero.Styles.primaryDialects[fallbackLocale] !== undefined) {
+			fallbackLocale = Zotero.Styles.primaryDialects[fallbackLocale];
 		}
 		
 		if (prefLocale) {
 			desiredLocale = prefLocale;
 		} else {
-			desiredLocale = Zotero.locale;
+			desiredLocale = fallbackLocale;
 		}
 		
 		var menuLocales = {};
@@ -473,9 +473,9 @@ Zotero.Styles = new function() {
 		
 		menuLocalesKeys.sort();
 		
-		if (Zotero.locale && menuLocales[Zotero.locale] === undefined) {
-			menuLocales[Zotero.locale] = Zotero.locale;
-			menuLocalesKeys.unshift(Zotero.locale);
+		if (fallbackLocale && menuLocales[fallbackLocale] === undefined) {
+			menuLocales[fallbackLocale] = fallbackLocale;
+			menuLocalesKeys.unshift(fallbackLocale);
 		}
 		if (prefLocale && menuLocales[prefLocale] === undefined) {
 			menuLocales[prefLocale] = prefLocale;
