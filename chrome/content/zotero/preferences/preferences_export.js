@@ -28,7 +28,6 @@
 Zotero_Preferences.Export = {
 	init: function () {
 		this.populateQuickCopyList();
-		this.populateQuickCopyLocaleList();
 		this.updateQuickCopyInstructions();
 		
 		var charsetMenu = document.getElementById("zotero-import-charsetMenu");
@@ -48,7 +47,11 @@ Zotero_Preferences.Export = {
 		var menulist = document.getElementById("zotero-quickCopy-menu");
 		this.buildQuickCopyFormatDropDown(menulist, Zotero.QuickCopy.getContentType(format), format);
 		menulist.setAttribute('preference', "pref-quickCopy-setting");
-		this.updateQuickCopyHTMLCheckbox();
+		
+		// Initialize locale drop-down
+		this.populateQuickCopyLocaleList();
+		
+		this.updateQuickCopyUI();
 		
 		if (!Zotero.isStandalone) {
 			this.refreshQuickCopySiteList();
@@ -92,7 +95,7 @@ Zotero_Preferences.Export = {
 			var itemNode = document.createElement("menuitem");
 			itemNode.setAttribute("value", val);
 			itemNode.setAttribute("label", style.title);
-			itemNode.setAttribute("oncommand", 'Zotero_Preferences.Export.updateQuickCopyHTMLCheckbox()');
+			itemNode.setAttribute("oncommand", 'Zotero_Preferences.Export.updateQuickCopyUI()');
 			popup.appendChild(itemNode);
 			
 			if (baseVal == currentFormat) {
@@ -120,7 +123,7 @@ Zotero_Preferences.Export = {
 			var itemNode = document.createElement("menuitem");
 			itemNode.setAttribute("value", val);
 			itemNode.setAttribute("label", translators[i].label);
-			itemNode.setAttribute("oncommand", 'Zotero_Preferences.Export.updateQuickCopyHTMLCheckbox()');
+			itemNode.setAttribute("oncommand", 'Zotero_Preferences.Export.updateQuickCopyUI()');
 			popup.appendChild(itemNode);
 			
 			if (val == currentFormat) {
@@ -134,16 +137,30 @@ Zotero_Preferences.Export = {
 	},
 	
 	
-	updateQuickCopyHTMLCheckbox: function () {
+	updateQuickCopyUI: function () {
 		var format = document.getElementById('zotero-quickCopy-menu').value;
 		var mode, contentType;
 		
-		var checkbox = document.getElementById('zotero-quickCopy-copyAsHTML');
 		[mode, format] = format.split('=');
 		[mode, contentType] = mode.split('/');
 		
+		var checkbox = document.getElementById('zotero-quickCopy-copyAsHTML');
 		checkbox.checked = contentType == 'html';
 		checkbox.disabled = mode != 'bibliography';
+		
+		var menulist = document.getElementById('locale-menu');
+		if (mode != 'bibliography') {
+			// maintain menu selection but show blank label
+			menulist.insertItemAt(0, '', menulist.value);
+			menulist.selectedIndex = 0;
+			menulist.disabled = true;
+		} else if (menulist.disabled == true) {
+			// restore original menu selection
+			let oldValue = menulist.selectedItem.value;
+			menulist.removeItemAt(0);
+			menulist.value = oldValue;
+			menulist.disabled = false;
+		}
 	},
 	
 	
