@@ -85,7 +85,12 @@ var Zotero_File_Interface_Bibliography = new function() {
 			selectIndex = 0;
 		}
 		
-		this.populateLocaleList();
+		// add locales to list
+		if(!_io.locale) {
+			_io.locale = Zotero.Prefs.get("export.lastLocale");
+		}
+		var menulist = document.getElementById("locale-menu");
+		selectedLocale = Zotero.Styles.populateLocaleList(menulist, _io.locale);
 		
 		// Has to be async to work properly
 		window.setTimeout(function () {
@@ -150,16 +155,6 @@ var Zotero_File_Interface_Bibliography = new function() {
 		
 		// set style to false, in case this is cancelled
 		_io.style = false;
-	};
-
-	/*
-	 * Builds the locale drop-down
-	 */
-	this.populateLocaleList = function () {
-		var lastLocale = Zotero.Prefs.get("export.lastLocale");
-		var menulist = document.getElementById("locale-menu");
-		
-		selectedLocale = Zotero.Styles.populateLocaleList(menulist, lastLocale);
 	};
 
 	/*

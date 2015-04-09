@@ -433,8 +433,7 @@ Zotero.Styles = new function() {
 	}
 	
 	/**
-	 * Populate Quick Copy-type menulist with locales
-	 * (for locale menulists that don't update with style selection)
+	 * Populate menulist with locales
 	 */
 	this.populateLocaleList = function(menulist, prefLocale) {
 		if(!_initialized) this.init();
