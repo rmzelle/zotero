@@ -49,7 +49,9 @@ Zotero_Preferences.Export = {
 		menulist.setAttribute('preference', "pref-quickCopy-setting");
 		
 		// Initialize locale drop-down
-		this.populateQuickCopyLocaleList();
+		var localeMenulist = document.getElementById("locale-menu");
+		this.populateQuickCopyLocaleList(localeMenulist);
+		localeMenulist.setAttribute('preference', "pref-quickCopy-locale");
 		
 		this.updateQuickCopyUI();
 		
@@ -244,12 +246,10 @@ Zotero_Preferences.Export = {
 	/*
 	 * Builds the Quick Copy locale drop-down
 	 */
-	populateQuickCopyLocaleList: function () {
+	populateQuickCopyLocaleList: function (menulist) {
 		var quickCopyLocale = Zotero.Prefs.get("export.quickCopy.locale");
-		var menulist = document.getElementById("locale-menu");
 		
 		Zotero.Styles.populateLocaleList(menulist, quickCopyLocale);
-		menulist.setAttribute('preference', "pref-quickCopy-locale");
 	},
 	
 	updateQuickCopyInstructions: function () {
