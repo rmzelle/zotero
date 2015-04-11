@@ -86,8 +86,10 @@
 			io.format
 		);
 		window.opener.Zotero_Preferences.Export.populateQuickCopyLocaleList(
-			document.getElementById('locale-menu')
+			document.getElementById('locale-menu'),
+			io.locale
 		);
+		document.getElementById('zotero-quickCopy-copyAsHTML').checked = io.asHTML;
 		window.opener.Zotero_Preferences.Export.updateQuickCopyUI();
 	]]>
 	</script>

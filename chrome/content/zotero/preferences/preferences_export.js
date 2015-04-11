@@ -169,19 +169,24 @@ Zotero_Preferences.Export = {
 	showQuickCopySiteEditor: function (index) {
 		var treechildren = document.getElementById('quickCopy-siteSettings-rows');
 		
-		if (index != undefined && index > -1 && index < treechildren.childNodes.length) {
+		var format = document.getElementById('zotero-quickCopy-menu').label; 
+		var locale = document.getElementById('locale-menu').value;
+		var asHTML = document.getElementById('zotero-quickCopy-copyAsHTML').checked;
+		
+		if (index !== undefined && index > -1 && index < treechildren.childNodes.length) {
 			var treerow = treechildren.childNodes[index].firstChild;
 			var domain = treerow.childNodes[0].getAttribute('label');
-			var format = treerow.childNodes[1].getAttribute('label');
-			var asHTML = treerow.childNodes[2].getAttribute('label') != '';
+			format = treerow.childNodes[1].getAttribute('label');
+			locale = treerow.childNodes[2].getAttribute('label');
+			asHTML = treerow.childNodes[3].getAttribute('label') !== '';
 		}
 		
-		var format = Zotero.QuickCopy.getSettingFromFormattedName(format);
+		format = Zotero.QuickCopy.getSettingFromFormattedName(format);
 		if (asHTML) {
 			format = format.replace('bibliography=', 'bibliography/html=');
 		}
 		
-		var io = {domain: domain, format: format, ok: false};
+		var io = {domain: domain, format: format, locale: locale, asHTML: asHTML, ok: false};
 		window.openDialog('chrome://zotero/content/preferences/quickCopySiteEditor.xul', "zotero-preferences-quickCopySiteEditor", "chrome, modal", io);
 		
 		if (!io.ok) {
@@ -217,17 +222,22 @@ Zotero_Preferences.Export = {
 			var treerow = document.createElement('treerow');
 			var domainCell = document.createElement('treecell');
 			var formatCell = document.createElement('treecell');
+			var localeCell = document.createElement('treecell');
 			var HTMLCell = document.createElement('treecell');
 			
 			domainCell.setAttribute('label', siteData[i].domainPath);
 			
 			var formatted = Zotero.QuickCopy.getFormattedNameFromSetting(siteData[i].format);
 			formatCell.setAttribute('label', formatted);
+			
+			localeCell.setAttribute('label', '');
+			
 			var copyAsHTML = Zotero.QuickCopy.getContentType(siteData[i].format) == 'html';
 			HTMLCell.setAttribute('label', copyAsHTML ? '   ✓   ' : '');
 			
 			treerow.appendChild(domainCell);
 			treerow.appendChild(formatCell);
+			treerow.appendChild(localeCell);
 			treerow.appendChild(HTMLCell);
 			treeitem.appendChild(treerow);
 			treechildren.appendChild(treeitem);
@@ -246,8 +256,10 @@ Zotero_Preferences.Export = {
 	/*
 	 * Builds the Quick Copy locale drop-down
 	 */
-	populateQuickCopyLocaleList: function (menulist) {
-		var quickCopyLocale = Zotero.Prefs.get("export.quickCopy.locale");
+	populateQuickCopyLocaleList: function (menulist, quickCopyLocale) {
+		if (!quickCopyLocale) {
+			quickCopyLocale = Zotero.Prefs.get("export.quickCopy.locale");
+		}
 		
 		Zotero.Styles.populateLocaleList(menulist, quickCopyLocale);
 	},
