@@ -26,6 +26,7 @@
 
 Zotero.QuickCopy = new function() {
 	this.getFormattedNameFromSetting = getFormattedNameFromSetting;
+	this.getFormattedNameFromID = getFormattedNameFromID;
 	this.getSettingFromFormattedName = getSettingFromFormattedName;
 	this.getContentType = getContentType;
 	this.stripContentType = stripContentType;
@@ -35,6 +36,36 @@ Zotero.QuickCopy = new function() {
 	var _initialized = false;
 	var _formattedNames = {};
 	
+	/*
+	 * Create Quick Copy setting object from string
+	 */
+	this.unserializeSetting = function (setting) {
+		var settingObject = {};
+		
+		// Populate object from setting string
+		try {
+			settingObject = JSON.parse(setting);
+		} catch (e) {
+			var parsedSetting = setting.match(/(bibliography|export)(?:\/([^=]+))?=(.+)$/);
+			if (parsedSetting) {
+				settingObject.mode = parsedSetting[1] ? parsedSetting[1] : '';
+				settingObject.contentType = parsedSetting[2] ? parsedSetting[2] : '';
+				settingObject.id = parsedSetting[3] ? parsedSetting[3] : '';
+				settingObject.locale = '';
+			}
+		}
+		
+		return settingObject;
+	};
+
+	function getFormattedNameFromID(id, mode) {
+		if (!_initialized) {
+			_init();
+		}
+		
+		var name = _formattedNames[mode + "=" + id];
+		return name ? name : '';
+	}
 	
 	function getFormattedNameFromSetting(setting) {
 		if (!_initialized) {

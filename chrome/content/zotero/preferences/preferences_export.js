@@ -197,7 +197,10 @@ Zotero_Preferences.Export = {
 			Zotero.DB.query("DELETE FROM settings WHERE setting='quickCopySite' AND key=?", [domain]);
 		}
 		
-		Zotero.DB.query("REPLACE INTO settings VALUES ('quickCopySite', ?, ?)", [io.domain, io.format]);
+		var quickCopysetting = Zotero.QuickCopy.unserializeSetting(io.format);
+		quickCopysetting.locale = io.locale;
+		
+		Zotero.DB.query("REPLACE INTO settings VALUES ('quickCopySite', ?, ?)", [io.domain, JSON.stringify(quickCopysetting)]);
 		
 		this.refreshQuickCopySiteList();
 	},
@@ -227,13 +230,12 @@ Zotero_Preferences.Export = {
 			
 			domainCell.setAttribute('label', siteData[i].domainPath);
 			
-			var formatted = Zotero.QuickCopy.getFormattedNameFromSetting(siteData[i].format);
-			formatCell.setAttribute('label', formatted);
+			var format = Zotero.QuickCopy.unserializeSetting(siteData[i].format);
 			
-			localeCell.setAttribute('label', '');
-			
-			var copyAsHTML = Zotero.QuickCopy.getContentType(siteData[i].format) == 'html';
-			HTMLCell.setAttribute('label', copyAsHTML ? '   ✓   ' : '');
+			format.id = Zotero.QuickCopy.getFormattedNameFromID(format.id, format.mode);
+			formatCell.setAttribute('label', format.id);
+			localeCell.setAttribute('label', format.locale);
+			HTMLCell.setAttribute('label', format.contentType == 'html' ? '   ✓   ' : '');
 			
 			treerow.appendChild(domainCell);
 			treerow.appendChild(formatCell);
