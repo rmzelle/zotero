@@ -44,8 +44,8 @@ var Zotero_CSL_Editor = new function() {
 			return;
 		}
 		
-		var rawDefaultStyle = Zotero.Prefs.get('export.quickCopy.setting');
-		var defaultStyle = Zotero.QuickCopy.stripContentType(rawDefaultStyle);
+		var quickCopyFormat = Zotero.Prefs.get('export.quickCopy.setting');
+		quickCopyFormat = Zotero.QuickCopy.unserializeSetting(quickCopyFormat);
 		
 		var styles = Zotero.Styles.getAll();
 		var currentStyle = null;
@@ -55,7 +55,7 @@ var Zotero_CSL_Editor = new function() {
 				continue;
 			}
 			var item = cslList.appendItem(style.title, style.styleID);
-			if (!currentStyle || defaultStyle == ('bibliography=' + style.styleID)) {
+			if (!currentStyle || (quickCopyFormat.mode == 'bibliography' && quickCopyFormat.id == style.styleID)) {
 				currentStyle = style.styleID;
 				cslList.selectedIndex = listPos;
 			}

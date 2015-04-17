@@ -27,8 +27,6 @@
 Zotero.QuickCopy = new function() {
 	this.getFormattedNameFromSetting = getFormattedNameFromSetting;
 	this.getSettingFromFormattedName = getSettingFromFormattedName;
-	this.getContentType = getContentType;
-	this.stripContentType = stripContentType;
 	this.getFormatFromURL = getFormatFromURL;
 	this.getContentFromItems = getContentFromItems;
 	
@@ -83,23 +81,6 @@ Zotero.QuickCopy = new function() {
 		}
 		
 		return '';
-	}
-	
-	
-	/*
-	 * Returns the setting with any contentType stripped from the mode part
-	 */
-	function getContentType(setting) {
-		var matches = setting.match(/(?:bibliography|export)\/([^=]+)=.+$/, '$1');
-		return matches ? matches[1] : '';
-	}
-	
-	
-	/*
-	 * Returns the setting with any contentType stripped from the mode part
-	 */
-	function stripContentType(setting) {
-		return setting.replace(/(bibliography|export)(?:\/[^=]+)?=(.+)$/, '$1=$2');
 	}
 	
 	
