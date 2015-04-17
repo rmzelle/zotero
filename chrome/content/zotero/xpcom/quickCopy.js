@@ -358,7 +358,7 @@ Zotero.QuickCopy = new function() {
 			}
 			
 			// determine locale preference
-			var locale = Zotero.Prefs.get('export.quickCopy.locale');
+			var locale = format.locale ? format.locale : Zotero.Prefs.get('export.quickCopy.locale');
 			
 			// Copy citations if shift key pressed
 			if (modified) {
