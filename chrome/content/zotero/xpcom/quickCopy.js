@@ -25,10 +25,6 @@
 
 
 Zotero.QuickCopy = new function() {
-	this.getFormattedNameFromSetting = getFormattedNameFromSetting;
-	this.getSettingFromFormattedName = getSettingFromFormattedName;
-	this.getFormatFromURL = getFormatFromURL;
-	this.getContentFromItems = getContentFromItems;
 	
 	var _initialized = false;
 	var _formattedNames = {};
@@ -52,13 +48,15 @@ Zotero.QuickCopy = new function() {
 				}
 			}
 		} else {
+			// return setting if not a string, in which case it might already be an object
 			return setting;
 		}
 		
 		return settingObject;
 	};
-
-	function getFormattedNameFromSetting(setting) {
+	
+	
+	this.getFormattedNameFromSetting = function (setting) {
 		if (!_initialized) {
 			_init();
 		}
@@ -67,9 +65,10 @@ Zotero.QuickCopy = new function() {
 		
 		var name = _formattedNames[format.mode + "=" + format.id];
 		return name ? name : '';
-	}
+	};
 	
-	function getSettingFromFormattedName(name) {
+	
+	this.getSettingFromFormattedName = function (name) {
 		if (!_initialized) {
 			_init();
 		}
@@ -81,10 +80,10 @@ Zotero.QuickCopy = new function() {
 		}
 		
 		return '';
-	}
+	};
 	
 	
-	function getFormatFromURL(url) {
+	this.getFormatFromURL = function(url) {
 		var quickCopyPref = Zotero.Prefs.get("export.quickCopy.setting");
 		quickCopyPref = JSON.stringify(this.unserializeSetting(quickCopyPref));
 		
@@ -149,7 +148,7 @@ Zotero.QuickCopy = new function() {
 		} else {
 			return quickCopyPref;
 		}
-	}
+	};
 	
 	
 	/*
@@ -157,8 +156,9 @@ Zotero.QuickCopy = new function() {
 	 *
 	 * |items| is an array of Zotero.Item objects
 	 *
-	 * |format| is a Quick Copy format string
-	 *    (e.g. "bibliography=http://purl.org/net/xbiblio/csl/styles/apa.csl")
+	 * |format| may be a Quick Copy format string
+	 * (e.g. "bibliography=http://purl.org/net/xbiblio/csl/styles/apa.csl")
+	 * or an Quick Copy format object
 	 *
 	 * |callback| is only necessary if using an export format and should be
 	 * a function suitable for Zotero.Translate.setHandler, taking parameters
@@ -168,7 +168,7 @@ Zotero.QuickCopy = new function() {
 	 * If bibliography format, the process is synchronous and an object
 	 * contain properties 'text' and 'html' is returned.
 	 */
-	function getContentFromItems(items, format, callback, modified) {
+	this.getContentFromItems = function (items, format, callback, modified) {
 		if (items.length > Zotero.Prefs.get('export.quickCopy.dragLimit')) {
 			Zotero.debug("Skipping quick copy for " + items.length + " items");
 			return false;
@@ -359,7 +359,7 @@ Zotero.QuickCopy = new function() {
 		}
 		
 		throw ("Invalid mode in Zotero.QuickCopy.getContentFromItems()");
-	}
+	};
 	
 	
 	function _init() {
