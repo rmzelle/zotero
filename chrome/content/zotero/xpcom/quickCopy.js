@@ -26,7 +26,6 @@
 
 Zotero.QuickCopy = new function() {
 	this.getFormattedNameFromSetting = getFormattedNameFromSetting;
-	this.getFormattedNameFromID = getFormattedNameFromID;
 	this.getSettingFromFormattedName = getSettingFromFormattedName;
 	this.getContentType = getContentType;
 	this.stripContentType = stripContentType;
@@ -37,42 +36,38 @@ Zotero.QuickCopy = new function() {
 	var _formattedNames = {};
 	
 	/*
-	 * Create Quick Copy setting object from string
+	 * Return Quick Copy setting object from string
 	 */
 	this.unserializeSetting = function (setting) {
 		var settingObject = {};
 		
-		// Populate object from setting string
-		try {
-			settingObject = JSON.parse(setting);
-		} catch (e) {
-			var parsedSetting = setting.match(/(bibliography|export)(?:\/([^=]+))?=(.+)$/);
-			if (parsedSetting) {
-				settingObject.mode = parsedSetting[1] ? parsedSetting[1] : '';
-				settingObject.contentType = parsedSetting[2] ? parsedSetting[2] : '';
-				settingObject.id = parsedSetting[3] ? parsedSetting[3] : '';
-				settingObject.locale = '';
+		if (typeof setting === 'string' || setting instanceof String) {
+			try {
+				settingObject = JSON.parse(setting);
+			} catch (e) {
+				var parsedSetting = setting.match(/(bibliography|export)(?:\/([^=]+))?=(.+)$/);
+				if (parsedSetting) {
+					settingObject.mode = parsedSetting[1] ? parsedSetting[1] : '';
+					settingObject.contentType = parsedSetting[2] ? parsedSetting[2] : '';
+					settingObject.id = parsedSetting[3] ? parsedSetting[3] : '';
+					settingObject.locale = '';
+				}
 			}
+		} else {
+			return setting;
 		}
 		
 		return settingObject;
 	};
 
-	function getFormattedNameFromID(id, mode) {
-		if (!_initialized) {
-			_init();
-		}
-		
-		var name = _formattedNames[mode + "=" + id];
-		return name ? name : '';
-	}
-	
 	function getFormattedNameFromSetting(setting) {
 		if (!_initialized) {
 			_init();
 		}
 		
-		var name = _formattedNames[this.stripContentType(setting)];
+		var format = this.unserializeSetting(setting);
+		
+		var name = _formattedNames[format.mode + "=" + format.id];
 		return name ? name : '';
 	}
 	
@@ -109,8 +104,11 @@ Zotero.QuickCopy = new function() {
 	
 	
 	function getFormatFromURL(url) {
+		var quickCopyPref = Zotero.Prefs.get("export.quickCopy.setting");
+		quickCopyPref = JSON.stringify(this.unserializeSetting(quickCopyPref));
+		
 		if (!url) {
-			return Zotero.Prefs.get("export.quickCopy.setting");
+			return quickCopyPref;
 		}
 		
 		var ioService = Components.classes["@mozilla.org/network/io-service;1"]
@@ -122,7 +120,7 @@ Zotero.QuickCopy = new function() {
 			var urlPath = nsIURI.path;
 		}
 		catch (e) {
-			return Zotero.Prefs.get("export.quickCopy.setting");
+			return quickCopyPref;
 		}
 		
 		var matches = [];
@@ -131,13 +129,14 @@ Zotero.QuickCopy = new function() {
 			+ "WHERE setting='quickCopySite' AND (key LIKE ? OR key LIKE ?)";
 		var urlDomain = urlHostPort.match(/[^\.]+\.[^\.]+$/);
 		var rows = Zotero.DB.query(sql, ['%' + urlDomain + '%', '/%']);
-		for each(var row in rows) {
-			var [domain, path] = row.domainPath.split(/\//);
+		for (let i = 0; i < rows.length; i++) {
+			let row = rows[i];
+			let [domain, path] = row.domainPath.split(/\//);
 			path = '/' + (path ? path : '');
-			var re = new RegExp(domain + '$');
-			if (urlHostPort.match(re) && urlPath.indexOf(path) == 0) {
+			let re = new RegExp(domain + '$');
+			if (urlHostPort.match(re) && urlPath.indexOf(path) === 0) {
 				matches.push({
-					format: row.format,
+					format: JSON.stringify(this.unserializeSetting(row.format)),
 					domainLength: domain.length,
 					pathLength: path.length
 				});
@@ -161,14 +160,14 @@ Zotero.QuickCopy = new function() {
 			}
 			
 			return -1;
-		}
+		};
 		
 		if (matches.length) {
 			matches.sort(sort);
 			return matches[0].format;
+		} else {
+			return quickCopyPref;
 		}
-		
-		return Zotero.Prefs.get("export.quickCopy.setting");
 	}
 	
 	
@@ -194,19 +193,18 @@ Zotero.QuickCopy = new function() {
 			return false;
 		}
 		
-		var [mode, format] = format.split('=');
-		var [mode, contentType] = mode.split('/');
+		format = this.unserializeSetting(format);
 		
-		if (mode == 'export') {
+		if (format.mode == 'export') {
 			var translation = new Zotero.Translate.Export;
 			translation.noWait = true;	// needed not to break drags
 			translation.setItems(items);
-			translation.setTranslator(format);
+			translation.setTranslator(format.id);
 			translation.setHandler("done", callback);
 			translation.translate();
 			return true;
 		}
-		else if (mode == 'bibliography') {
+		else if (format.mode == 'bibliography') {
 			// Move notes to separate array
 			var allNotes = true;
 			var notes = [];
@@ -352,7 +350,7 @@ Zotero.QuickCopy = new function() {
 				}
 				
 				var content = {
-					text: contentType == "html" ? html : text,
+					text: format.contentType == "html" ? html : text,
 					html: copyHTML
 				};
 				
@@ -364,22 +362,22 @@ Zotero.QuickCopy = new function() {
 			
 			// Copy citations if shift key pressed
 			if (modified) {
-				var csl = Zotero.Styles.get(format).getCiteProc(locale);
+				var csl = Zotero.Styles.get(format.id).getCiteProc(locale);
 				csl.updateItems([item.id for each(item in items)]);
 				var citation = {citationItems:[{id:item.id} for each(item in items)], properties:{}};
 				var html = csl.previewCitationCluster(citation, [], [], "html"); 
 				var text = csl.previewCitationCluster(citation, [], [], "text"); 
 			} else {
-				var style = Zotero.Styles.get(format);
+				var style = Zotero.Styles.get(format.id);
 				var cslEngine = style.getCiteProc(locale);
  				var html = Zotero.Cite.makeFormattedBibliographyOrCitationList(cslEngine, items, "html");
 				var text = Zotero.Cite.makeFormattedBibliographyOrCitationList(cslEngine, items, "text");
 			}
 			
-			return {text:(contentType == "html" ? html : text), html:html};
+			return {text:(format.contentType == "html" ? html : text), html:html};
 		}
 		
-		throw ("Invalid mode '" + mode + "' in Zotero.QuickCopy.getContentFromItems()");
+		throw ("Invalid mode in Zotero.QuickCopy.getContentFromItems()");
 	}
 	
 	

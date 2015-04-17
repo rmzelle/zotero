@@ -79,10 +79,11 @@
 	<script>
 	<![CDATA[
 		var io = window.arguments[0];
+		var contentType = io.asHTML ? 'html' : '';
 		document.getElementById('zotero-quickCopy-domain').value = io.domain ? io.domain : '';
 		window.opener.Zotero_Preferences.Export.buildQuickCopyFormatDropDown(
 			document.getElementById('zotero-quickCopy-menu'),
-			Zotero.QuickCopy.getContentType(io.format),
+			contentType,
 			io.format
 		);
 		window.opener.Zotero_Preferences.Export.populateQuickCopyLocaleList(
