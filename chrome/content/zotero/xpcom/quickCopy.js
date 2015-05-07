@@ -358,7 +358,7 @@ Zotero.QuickCopy = new function() {
 			return {text:(format.contentType == "html" ? html : text), html:html};
 		}
 		
-		throw ("Invalid mode in Zotero.QuickCopy.getContentFromItems()");
+		throw ("Invalid mode '" + format.mode + "' in Zotero.QuickCopy.getContentFromItems()");
 	};
 	
 	
