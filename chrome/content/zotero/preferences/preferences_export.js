@@ -152,17 +152,24 @@ Zotero_Preferences.Export = {
 		checkbox.disabled = mode != 'bibliography';
 		
 		var menulist = document.getElementById('locale-menu');
+		var menulistLabel = document.getElementById('locale-menu-label');
 		if (mode != 'bibliography') {
 			// maintain menu selection but show blank label
 			menulist.insertItemAt(0, '', menulist.value);
 			menulist.selectedIndex = 0;
 			menulist.disabled = true;
+			if (menulistLabel) {
+				menulistLabel.disabled = true;
+			}
 		} else if (menulist.disabled == true) {
 			// restore original menu selection
 			let oldValue = menulist.selectedItem.value;
 			menulist.removeItemAt(0);
 			menulist.value = oldValue;
 			menulist.disabled = false;
+			if (menulistLabel) {
+				menulistLabel.disabled = false;
+			}
 		}
 	},
 	

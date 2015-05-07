@@ -51,7 +51,7 @@
 			<menulist id="zotero-quickCopy-menu"/>
 			
 			<hbox align="center">
-				<label value="&zotero.preferences.quickCopy.locale;" control="locale-menu"/>
+				<label id="locale-menu-label" value="&zotero.preferences.quickCopy.locale;" control="locale-menu"/>
 				<menulist id="locale-menu"/>
 				
 				<separator orient="vertical" width="15px"/>
