@@ -41,9 +41,9 @@ Zotero.QuickCopy = new function() {
 			} catch (e) {
 				var parsedSetting = setting.match(/(bibliography|export)(?:\/([^=]+))?=(.+)$/);
 				if (parsedSetting) {
-					settingObject.mode = parsedSetting[1] ? parsedSetting[1] : '';
-					settingObject.contentType = parsedSetting[2] ? parsedSetting[2] : '';
-					settingObject.id = parsedSetting[3] ? parsedSetting[3] : '';
+					settingObject.mode = parsedSetting[1];
+					settingObject.contentType = parsedSetting[2] || '';
+					settingObject.id = parsedSetting[3];
 					settingObject.locale = '';
 				}
 			}
