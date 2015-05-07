@@ -432,6 +432,10 @@ Zotero.Styles = new function() {
 	this.populateLocaleList = function(menulist, prefLocale) {
 		if(!_initialized) this.init();
 		
+		// Reset menulist
+		menulist.selectedItem = null;
+		menulist.removeAllItems();
+		
 		var doc = menulist.ownerDocument;
 		var popup = doc.createElement('menupopup');
 		menulist.appendChild(popup);
