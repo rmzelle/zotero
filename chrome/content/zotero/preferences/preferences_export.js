@@ -153,7 +153,7 @@ Zotero_Preferences.Export = {
 		
 		var menulist = document.getElementById('locale-menu');
 		var menulistLabel = document.getElementById('locale-menu-label');
-		if (mode != 'bibliography') {
+		if (mode != 'bibliography' && menulist.disabled !== true) {
 			// maintain menu selection but show blank label
 			menulist.insertItemAt(0, '', menulist.value);
 			menulist.selectedIndex = 0;
@@ -161,7 +161,7 @@ Zotero_Preferences.Export = {
 			if (menulistLabel) {
 				menulistLabel.disabled = true;
 			}
-		} else if (menulist.disabled == true) {
+		} else if (mode == 'bibliography' && menulist.disabled === true) {
 			// restore original menu selection
 			let oldValue = menulist.selectedItem.value;
 			menulist.removeItemAt(0);
