@@ -511,7 +511,7 @@ var Zotero_File_Interface = new function() {
 		}
 		
 		// determine locale preference
-		var locale = Zotero.Prefs.get('export.lastLocale');
+		var locale = io.locale;
 		
 		// generate bibliography
 		try {
