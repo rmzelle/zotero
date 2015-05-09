@@ -153,22 +153,34 @@ Zotero_Preferences.Export = {
 		
 		var menulist = document.getElementById('locale-menu');
 		var menulistLabel = document.getElementById('locale-menu-label');
-		if (mode != 'bibliography' && menulist.disabled !== true) {
-			// maintain menu selection but show blank label
-			menulist.insertItemAt(0, '', menulist.value);
+		
+		var lastSelectedLocale = menulist.value;
+		var localeLabel = "";
+		if (menulist.disabled === true) {
+			menulist.removeItemAt(0);
+		}
+		
+		if (mode == 'bibliography') {
+			var defaultStyleLocale = Zotero.Styles.get(format).locale;
+			if (defaultStyleLocale) {
+				if (Zotero.Styles.locales[defaultStyleLocale] !== undefined) {
+					localeLabel = Zotero.Styles.locales[defaultStyleLocale];
+				} else {
+					localeLabel = defaultStyleLocale;
+				}
+			}
+		}
+		
+		if (mode == 'bibliography' && !defaultStyleLocale) {
+			menulist.value = lastSelectedLocale;
+			menulist.disabled = false;
+			menulistLabel.disabled = false;
+		} else {
+			menulist.insertItemAt(0, localeLabel, lastSelectedLocale);
 			menulist.selectedIndex = 0;
 			menulist.disabled = true;
-			if (menulistLabel) {
+			if (mode != 'bibliography') {
 				menulistLabel.disabled = true;
-			}
-		} else if (mode == 'bibliography' && menulist.disabled === true) {
-			// restore original menu selection
-			let oldValue = menulist.selectedItem.value;
-			menulist.removeItemAt(0);
-			menulist.value = oldValue;
-			menulist.disabled = false;
-			if (menulistLabel) {
-				menulistLabel.disabled = false;
 			}
 		}
 	},
