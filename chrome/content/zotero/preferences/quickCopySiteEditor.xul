@@ -47,7 +47,14 @@
 				var io = window.arguments[0];
 				io.domain = document.getElementById('zotero-quickCopy-domain').value;
 				io.format = document.getElementById('zotero-quickCopy-menu').value;
-				io.locale = document.getElementById('locale-menu').label !== '' ? document.getElementById('locale-menu').value : '';
+				
+				var menulist = document.getElementById('locale-menu');
+				if (menulist.disabled === false) {
+					io.locale = document.getElementById('locale-menu').value;
+				} else {
+					io.locale = "";
+				}
+				
 				io.ok = true;
 			}
 		}
