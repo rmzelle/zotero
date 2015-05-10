@@ -50,7 +50,7 @@ Zotero_Preferences.Export = {
 		menulist.setAttribute('preference', "pref-quickCopy-setting");
 		
 		// Initialize locale drop-down
-		var localeMenulist = document.getElementById("locale-menu");
+		var localeMenulist = document.getElementById("zotero-quickCopy-locale-menu");
 		this.populateQuickCopyLocaleList(localeMenulist);
 		localeMenulist.setAttribute('preference', "pref-quickCopy-locale");
 		
@@ -151,8 +151,8 @@ Zotero_Preferences.Export = {
 		checkbox.checked = contentType == 'html';
 		checkbox.disabled = mode != 'bibliography';
 		
-		var menulist = document.getElementById('locale-menu');
-		var menulistLabel = document.getElementById('locale-menu-label');
+		var menulist = document.getElementById('zotero-quickCopy-locale-menu');
+		var menulistLabel = document.getElementById('zotero-quickCopy-locale-menu-label');
 		
 		var lastSelectedLocale = menulist.value;
 		var localeLabel = "";
@@ -190,7 +190,7 @@ Zotero_Preferences.Export = {
 		var treechildren = document.getElementById('quickCopy-siteSettings-rows');
 		
 		var formattedName = document.getElementById('zotero-quickCopy-menu').label; 
-		var locale = document.getElementById('locale-menu').value;
+		var locale = document.getElementById('zotero-quickCopy-locale-menu').value;
 		var asHTML = document.getElementById('zotero-quickCopy-copyAsHTML').checked;
 		
 		if (index !== undefined && index > -1 && index < treechildren.childNodes.length) {
