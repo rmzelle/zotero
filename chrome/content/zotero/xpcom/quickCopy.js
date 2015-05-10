@@ -30,15 +30,26 @@ Zotero.QuickCopy = new function() {
 	var _formattedNames = {};
 	
 	/*
-	 * Return Quick Copy setting object from string
+	 * Return Quick Copy setting object from string, stringified object, or object
+	 * 
+	 * Example string format: "bibliography/html=http://www.zotero.org/styles/apa"
+	 *
+	 * Quick Copy setting object has the following properties:
+	 * - "mode": "bibliography" (for styles) or "export" (for export translators)
+	 * - "contentType: "" (plain text output) or "html" (HTML output; for styles
+	 *   only)
+	 * - "id": style ID or export translator ID
+	 * - "locale": locale code (for styles only)
 	 */
 	this.unserializeSetting = function (setting) {
 		var settingObject = {};
 		
 		if (typeof setting === 'string' || setting instanceof String) {
 			try {
+				// First test if string input is a stringified object
 				settingObject = JSON.parse(setting);
 			} catch (e) {
+				// Try parsing as formatted string
 				var parsedSetting = setting.match(/(bibliography|export)(?:\/([^=]+))?=(.+)$/);
 				if (parsedSetting) {
 					settingObject.mode = parsedSetting[1];
@@ -48,7 +59,7 @@ Zotero.QuickCopy = new function() {
 				}
 			}
 		} else {
-			// return setting if not a string, in which case it might already be an object
+			// Return input if not a string; it might already be an object
 			return setting;
 		}
 		
@@ -157,7 +168,7 @@ Zotero.QuickCopy = new function() {
 	 * |items| is an array of Zotero.Item objects
 	 *
 	 * |format| may be a Quick Copy format string
-	 * (e.g. "bibliography=http://purl.org/net/xbiblio/csl/styles/apa.csl")
+	 * (e.g. "bibliography=http://www.zotero.org/styles/apa")
 	 * or an Quick Copy format object
 	 *
 	 * |callback| is only necessary if using an export format and should be
