@@ -169,19 +169,18 @@ Zotero_Preferences.Export = {
 					localeLabel = defaultStyleLocale;
 				}
 			}
+			menulistLabel.disabled = false;
+		} else {
+			menulistLabel.disabled = true;
 		}
 		
 		if (mode == 'bibliography' && !defaultStyleLocale) {
 			menulist.value = lastSelectedLocale;
 			menulist.disabled = false;
-			menulistLabel.disabled = false;
 		} else {
 			menulist.insertItemAt(0, localeLabel, lastSelectedLocale);
 			menulist.selectedIndex = 0;
 			menulist.disabled = true;
-			if (mode != 'bibliography') {
-				menulistLabel.disabled = true;
-			}
 		}
 	},
 	
