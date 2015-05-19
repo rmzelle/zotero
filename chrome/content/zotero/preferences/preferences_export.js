@@ -51,9 +51,10 @@ Zotero_Preferences.Export = {
 		
 		// Initialize locale drop-down
 		var localeMenulist = document.getElementById("zotero-quickCopy-locale-menu");
-		this.populateQuickCopyLocaleList(localeMenulist);
+		Zotero.Styles.populateLocaleList(localeMenulist);
 		localeMenulist.setAttribute('preference', "pref-quickCopy-locale");
 		
+		this._lastSelectedLocale = Zotero.Prefs.get("export.quickCopy.locale");
 		this.updateQuickCopyUI();
 		
 		if (!Zotero.isStandalone) {
@@ -151,37 +152,11 @@ Zotero_Preferences.Export = {
 		checkbox.checked = contentType == 'html';
 		checkbox.disabled = mode != 'bibliography';
 		
-		var menulist = document.getElementById('zotero-quickCopy-locale-menu');
-		var menulistLabel = document.getElementById('zotero-quickCopy-locale-menu-label');
-		
-		var lastSelectedLocale = menulist.value;
-		var localeLabel = "";
-		if (menulist.disabled === true) {
-			menulist.removeItemAt(0);
-		}
-		
-		if (mode == 'bibliography') {
-			var defaultStyleLocale = Zotero.Styles.get(format).locale;
-			if (defaultStyleLocale) {
-				if (Zotero.Styles.locales[defaultStyleLocale] !== undefined) {
-					localeLabel = Zotero.Styles.locales[defaultStyleLocale];
-				} else {
-					localeLabel = defaultStyleLocale;
-				}
-			}
-			menulistLabel.disabled = false;
-		} else {
-			menulistLabel.disabled = true;
-		}
-		
-		if (mode == 'bibliography' && !defaultStyleLocale) {
-			menulist.value = lastSelectedLocale;
-			menulist.disabled = false;
-		} else {
-			menulist.insertItemAt(0, localeLabel, lastSelectedLocale);
-			menulist.selectedIndex = 0;
-			menulist.disabled = true;
-		}
+		Zotero.Styles.updateLocaleList(
+			document.getElementById('zotero-quickCopy-locale-menu'),
+			mode == 'bibliography' ? Zotero.Styles.get(format) : null,
+			this._lastSelectedLocale
+		);
 	},
 	
 	
@@ -189,7 +164,7 @@ Zotero_Preferences.Export = {
 		var treechildren = document.getElementById('quickCopy-siteSettings-rows');
 		
 		var formattedName = document.getElementById('zotero-quickCopy-menu').label; 
-		var locale = document.getElementById('zotero-quickCopy-locale-menu').value;
+		var locale = this._lastSelectedLocale;
 		var asHTML = document.getElementById('zotero-quickCopy-copyAsHTML').checked;
 		
 		if (index !== undefined && index > -1 && index < treechildren.childNodes.length) {
@@ -206,7 +181,7 @@ Zotero_Preferences.Export = {
 		}
 		
 		var io = {domain: domain, format: format, locale: locale, asHTML: asHTML, ok: false};
-		window.openDialog('chrome://zotero/content/preferences/quickCopySiteEditor.xul', "zotero-preferences-quickCopySiteEditor", "chrome, modal", io);
+		window.openDialog('chrome://zotero/content/preferences/quickCopySiteEditor.xul', "zotero-preferences-quickCopySiteEditor", "chrome, modal, centerscreen", io);
 		
 		if (!io.ok) {
 			return;
@@ -272,17 +247,6 @@ Zotero_Preferences.Export = {
 		var domainPath = treeitem.firstChild.firstChild.getAttribute('label');
 		Zotero.DB.query("DELETE FROM settings WHERE setting='quickCopySite' AND key=?", [domainPath]);
 		this.refreshQuickCopySiteList();
-	},
-	
-	/*
-	 * Builds the Quick Copy locale drop-down
-	 */
-	populateQuickCopyLocaleList: function (menulist, quickCopyLocale) {
-		if (!quickCopyLocale) {
-			quickCopyLocale = Zotero.Prefs.get("export.quickCopy.locale");
-		}
-		
-		Zotero.Styles.populateLocaleList(menulist, quickCopyLocale);
 	},
 	
 	updateQuickCopyInstructions: function () {
