@@ -257,6 +257,6 @@ var Zotero_File_Interface_Bibliography = new function() {
 		}
 		
 		// save locale
-		Zotero.Prefs.set("export.lastLocale", selectedLocale);
+		Zotero.Prefs.set("export.lastLocale", lastSelectedLocale);
 	};
 }
