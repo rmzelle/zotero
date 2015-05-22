@@ -70,7 +70,7 @@
 		
 		<separator class="thin"/>
 		
-		<label id="zotero-quickCopy-locale-menu-label" value="&zotero.preferences.quickCopy.locale;" control="zotero-quickCopy-locale-menu"/>
+		<label id="zotero-quickCopy-locale-menu-label" value="&zotero.bibliography.locale.label;" control="zotero-quickCopy-locale-menu"/>
 		<hbox align="center">
 			<menulist id="zotero-quickCopy-locale-menu" oncommand="Zotero_Preferences.Export._lastSelectedLocale = this.value"/>
 		</hbox>
