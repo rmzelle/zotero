@@ -49,7 +49,8 @@ var Zotero_CSL_Editor = new function() {
 		}
 		
 		if (currentStyle) {
-			this.onStyleSelected(currentStyle.styleID)
+			// Call asynchronously, see note in Zotero.Styles
+			window.setTimeout(this.onStyleSelected.bind(this, currentStyle.styleID), 1);
 		}
 		
 		var pageList = document.getElementById('zotero-csl-page-type');
@@ -64,21 +65,16 @@ var Zotero_CSL_Editor = new function() {
 	}
 	
 	this.onStyleSelected = function(styleID) {
-		window.setTimeout(
-			() => {
-				Zotero.Prefs.set('export.lastStyle', styleID);
-				let style = Zotero.Styles.get(styleID);
-				Zotero.Styles.updateLocaleList(
-					document.getElementById("locale-menu"),
-					style,
-					Zotero.Prefs.get('export.lastLocale')
-				);
-				
-				loadCSL(style.styleID);
-				this.refresh();
-			},
-			1
-		)
+		Zotero.Prefs.set('export.lastStyle', styleID);
+		let style = Zotero.Styles.get(styleID);
+		Zotero.Styles.updateLocaleList(
+			document.getElementById("locale-menu"),
+			style,
+			Zotero.Prefs.get('export.lastLocale')
+		);
+		
+		loadCSL(style.styleID);
+		this.refresh();
 	}
 	
 	this.refresh = function() {
