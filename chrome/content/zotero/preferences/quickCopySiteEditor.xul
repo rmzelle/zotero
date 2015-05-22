@@ -27,7 +27,14 @@
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <?xml-stylesheet href="chrome://zotero/skin/preferences.css"?>
 
-<!DOCTYPE window SYSTEM "chrome://zotero/locale/preferences.dtd">
+
+<!DOCTYPE window [
+  <!ENTITY % prefWindow SYSTEM "chrome://zotero/locale/preferences.dtd">
+  %prefWindow;
+  <!ENTITY % common SYSTEM "chrome://zotero/locale/zotero.dtd">
+  %common;
+]>
+
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 	title="" buttons="cancel,accept"
 	id="zotero-quickCopySiteEditor"
