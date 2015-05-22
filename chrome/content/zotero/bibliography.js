@@ -85,9 +85,6 @@ var Zotero_File_Interface_Bibliography = new function() {
 		}
 		
 		// add locales to list
-		if(!_io.locale) {
-			_io.locale = Zotero.Prefs.get("export.lastLocale");
-		}
 		Zotero.Styles.populateLocaleList(document.getElementById("locale-menu"));
 		lastSelectedLocale = Zotero.Prefs.get("export.lastLocale");
 		
