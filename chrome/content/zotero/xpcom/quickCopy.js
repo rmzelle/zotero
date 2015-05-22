@@ -119,13 +119,13 @@ Zotero.QuickCopy = new function() {
 		var sql = "SELECT key AS domainPath, value AS format FROM settings "
 			+ "WHERE setting='quickCopySite' AND (key LIKE ? OR key LIKE ?)";
 		var urlDomain = urlHostPort.match(/[^\.]+\.[^\.]+$/);
-		var rows = Zotero.DB.query(sql, ['%' + urlDomain + '%', '/%']);
+		var rows = Zotero.DB.query(sql, ['%' + urlDomain[0] + '%', '/%']);
 		for (let i = 0; i < rows.length; i++) {
 			let row = rows[i];
-			let [domain, path] = row.domainPath.split(/\//);
-			path = '/' + (path ? path : '');
-			let re = new RegExp(domain + '$');
-			if (urlHostPort.match(re) && urlPath.indexOf(path) === 0) {
+			let domain = row.domainPath.split('/',1)[0];
+			let path = row.domainPath.substr(domain.length) || '/';
+			let re = new RegExp('(^|[./])' + Zotero.Utilities.quotemeta(domain) + '$', 'i');
+			if (re.test(urlHostPort) && urlPath.indexOf(path) === 0) {
 				matches.push({
 					format: JSON.stringify(this.unserializeSetting(row.format)),
 					domainLength: domain.length,
