@@ -44,7 +44,7 @@ Zotero.QuickCopy = new function() {
 	this.unserializeSetting = function (setting) {
 		var settingObject = {};
 		
-		if (typeof setting === 'string' || setting instanceof String) {
+		if (typeof setting === 'string') {
 			try {
 				// First test if string input is a stringified object
 				settingObject = JSON.parse(setting);
