@@ -420,7 +420,7 @@ var Zotero_File_Interface = new function() {
 							   getService(Components.interfaces.nsIClipboard);
 		var style = Zotero.Styles.get(style);
 		var cslEngine = style.getCiteProc(locale);
-		
+	
 		// add HTML
  		var bibliography = Zotero.Cite.makeFormattedBibliographyOrCitationList(cslEngine, items, "html", asCitations);
 		var str = Components.classes["@mozilla.org/supports-string;1"].

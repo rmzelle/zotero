@@ -119,6 +119,7 @@ var Zotero_CSL_Editor = new function() {
 		}
 	}
 	
+	
 	function loadCSL(cslID) {
 		var editor = document.getElementById('zotero-csl-editor');
 		var style = Zotero.Styles.get(cslID);

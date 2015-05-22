@@ -249,6 +249,7 @@ Zotero_Preferences.Export = {
 		this.refreshQuickCopySiteList();
 	},
 	
+	
 	updateQuickCopyInstructions: function () {
 		var prefix = Zotero.isMac ? Zotero.getString('general.keys.cmdShift') : Zotero.getString('general.keys.ctrlShift');
 		
