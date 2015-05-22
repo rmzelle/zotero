@@ -220,7 +220,7 @@ Zotero_Preferences.Export = {
 			var domainCell = document.createElement('treecell');
 			var formatCell = document.createElement('treecell');
 			var localeCell = document.createElement('treecell');
-			var HTMLCell = document.createElement('treecell');
+			var htmlCell = document.createElement('treecell');
 			
 			domainCell.setAttribute('label', siteData[i].domainPath);
 			
@@ -229,12 +229,12 @@ Zotero_Preferences.Export = {
 			
 			var format = Zotero.QuickCopy.unserializeSetting(siteData[i].format);
 			localeCell.setAttribute('label', format.locale);
-			HTMLCell.setAttribute('label', format.contentType == 'html' ? '   ✓   ' : '');
+			htmlCell.setAttribute('label', format.contentType == 'html' ? '   ✓   ' : '');
 			
 			treerow.appendChild(domainCell);
 			treerow.appendChild(formatCell);
 			treerow.appendChild(localeCell);
-			treerow.appendChild(HTMLCell);
+			treerow.appendChild(htmlCell);
 			treeitem.appendChild(treerow);
 			treechildren.appendChild(treeitem);
 		}
