@@ -104,15 +104,15 @@ Zotero.QuickCopy = new function() {
 		
 		var ioService = Components.classes["@mozilla.org/network/io-service;1"]
 			.getService(Components.interfaces.nsIIOService);
-		var nsIURI = ioService.newURI(url, null, null);
-		
 		try {
-			var urlHostPort = nsIURI.hostPort;
-			var urlPath = nsIURI.path;
+			var nsIURI = ioService.newURI(url, null, null);
 		}
 		catch (e) {
 			return quickCopyPref;
 		}
+		
+		var urlHostPort = nsIURI.hostPort;
+		var urlPath = nsIURI.path;
 		
 		var matches = [];
 		
