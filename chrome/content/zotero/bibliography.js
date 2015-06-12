@@ -34,7 +34,7 @@
 
 var Zotero_File_Interface_Bibliography = new function() {
 	var _io, _saveStyle;
-	var lastSelectedLocale;
+	var lastSelectedLocale; // Only changes when explicitly selected
 	
 	/*
 	 * Initialize some variables and prepare event listeners for when chrome is done
@@ -56,18 +56,18 @@ var Zotero_File_Interface_Bibliography = new function() {
 		}
 		
 		var listbox = document.getElementById("style-listbox");
-		var styles = Zotero.Styles.getVisible();
 		
-		// if no style is set, get the last style used
+		// if no style is requested, get the last style used
 		if(!_io.style) {
 			_io.style = Zotero.Prefs.get("export.lastStyle");
 			_saveStyle = true;
 		}
 		
 		// add styles to list
+		var styles = Zotero.Styles.getVisible();
 		var index = 0;
 		var nStyles = styles.length;
-		var selectIndex = -1;
+		var selectIndex = null;
 		for(var i=0; i<nStyles; i++) {
 			var itemNode = document.createElement("listitem");
 			itemNode.setAttribute("value", styles[i].styleID);
@@ -80,13 +80,23 @@ var Zotero_File_Interface_Bibliography = new function() {
 			index++;
 		}
 		
-		if (selectIndex < 1) {
+		let requestedLocale;
+		if (selectIndex === null) {
+			// Requested style not found in list, pre-select first style
 			selectIndex = 0;
+		} else {
+			requestedLocale = _io.locale;
+		}
+		
+		let style = styles[selectIndex];
+		lastSelectedLocale = Zotero.Prefs.get("export.lastLocale");
+		if (requestedLocale && style && !style.locale) {
+			// pre-select supplied locale
+			lastSelectedLocale = requestedLocale;
 		}
 		
 		// add locales to list
 		Zotero.Styles.populateLocaleList(document.getElementById("locale-menu"));
-		lastSelectedLocale = Zotero.Prefs.get("export.lastLocale");
 		
 		// Has to be async to work properly
 		window.setTimeout(function () {
