@@ -83,6 +83,13 @@ Zotero.Styles = new function() {
 		dir.append("hidden");
 		if (dir.exists()) i += _readStylesFromDirectory(dir, true);
 		
+		// Sort visible styles by title
+		_visibleStyles.sort(function(a, b) {
+			return a.title.localeCompare(b.title);
+		})
+		// .. and freeze, so they can be returned directly
+		_visibleStyles = Object.freeze(_visibleStyles);
+		
 		Zotero.debug("Cached "+i+" styles in "+((new Date()).getTime() - start)+" ms");
 		
 		// transfer and reset "export.bibliographyLocale" pref value
@@ -154,6 +161,7 @@ Zotero.Styles = new function() {
 			}
 			i++;
 		}
+		
 		return i;
 	}
 	
@@ -182,11 +190,11 @@ Zotero.Styles = new function() {
 	
 	/**
 	 * Gets all visible styles
-	 * @return {Zotero.Style[]} An array of Zotero.Style objects
+	 * @return {Zotero.Style[]} An immutable array of Zotero.Style objects
 	 */
 	this.getVisible = function() {
 		if(!_initialized || !_cacheTranslatorData) this.init();
-		return _visibleStyles.slice(0);
+		return _visibleStyles; // Immutable
 	}
 	
 	/**
