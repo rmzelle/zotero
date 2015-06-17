@@ -44,11 +44,19 @@ Zotero.Styles = new function() {
 	this.ns = {
 		"csl":"http://purl.org/net/xbiblio/csl"
 	};
-
-	// TEMP
-	// Until we get asynchronous style loading, load renamed styles at startup, since the
-	// synchronous call we were using breaks the first drag of the session (on OS X, at least)
+	
 	this.preinit = function () {
+		// Upgrade style locale prefs for 4.0.27
+		var bibliographyLocale = Zotero.Prefs.get("export.bibliographyLocale");
+		if (bibliographyLocale) {
+			Zotero.Prefs.set("export.lastLocale", bibliographyLocale);
+			Zotero.Prefs.set("export.quickCopy.locale", bibliographyLocale);
+			Zotero.Prefs.clear("export.bibliographyLocale");
+		}
+		
+		// TEMP
+		// Until we get asynchronous style loading, load renamed styles at startup, since the
+		// synchronous call we were using breaks the first drag of the session (on OS X, at least)
 		_renamedStyles = {};
 		Zotero.HTTP.promise(
 			"GET", "resource://zotero/schema/renamed-styles.json", { responseType: 'json' }
@@ -91,15 +99,6 @@ Zotero.Styles = new function() {
 		_visibleStyles = Object.freeze(_visibleStyles);
 		
 		Zotero.debug("Cached "+i+" styles in "+((new Date()).getTime() - start)+" ms");
-		
-		// transfer and reset "export.bibliographyLocale" pref value
-		var bibliographyLocale = '';
-		bibliographyLocale = Zotero.Prefs.get("export.bibliographyLocale");
-		if (bibliographyLocale) {
-			Zotero.Prefs.set("export.lastLocale", bibliographyLocale);
-			Zotero.Prefs.set("export.quickCopy.locale", bibliographyLocale);
-			Zotero.Prefs.clear("export.bibliographyLocale");
-		}
 		
 		// load available CSL locales
 		var localeFile = {};
